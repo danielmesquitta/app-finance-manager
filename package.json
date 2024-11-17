@@ -1,5 +1,6 @@
 {
   "name": "finances",
+  "main": "expo-router/entry",
   "version": "1.0.0",
   "author": "Yuri Martins <develop@yumartins.com.br>",
   "license": "MIT",
@@ -11,13 +12,27 @@
   },
   "repository": "https://github.com/yumartins/finances.git",
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.2.3",
     "expo": "~52.0.7",
+    "expo-constants": "~17.0.3",
+    "expo-linking": "~7.0.2",
+    "expo-router": "~4.0.6",
+    "expo-splash-screen": "~0.29.11",
     "expo-status-bar": "~2.0.0",
+    "nativewind": "^4.1.23",
     "react": "18.3.1",
-    "react-native": "0.76.2"
+    "react-dom": "18.3.1",
+    "react-native": "0.76.2",
+    "react-native-gesture-handler": "~2.20.2",
+    "react-native-reanimated": "~3.16.1",
+    "react-native-safe-area-context": "4.12.0",
+    "react-native-screens": "~4.1.0",
+    "react-native-web": "~0.19.13",
+    "tailwindcss": "^3.4.15"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@biomejs/biome": "^1.9.4",
     "@types/react": "~18.3.12",
     "typescript": "^5.3.3"
   }

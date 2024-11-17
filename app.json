@@ -1,28 +1,41 @@
 {
-  "expo": {
-    "ios": {
-      "supportsTablet": true
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "name": "Finances",
-    "slug": "finances",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "version": "1.0.0",
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "orientation": "portrait",
-    "newArchEnabled": true,
-    "userInterfaceStyle": "light"
-  }
+	"expo": {
+		"ios": {
+			"supportsTablet": true
+		},
+		"web": {
+			"bundler": "metro",
+			"favicon": "./src/assets/favicon.png"
+		},
+		"name": "Finances",
+		"slug": "finances",
+		"icon": "./src/assets/icon.png",
+		"scheme": "finances",
+		"splash": {
+			"image": "./src/assets/splash-icon.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#FFFFFF"
+		},
+		"version": "1.0.0",
+		"plugins": [
+			"expo-router",
+			[
+				"expo-splash-screen",
+				{
+					"image": "./src/assets/splash-icon.png",
+					"imageWidth": 258,
+					"resizeMode": "contain"
+				}
+			]
+		],
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./src/assets/adaptive-icon.png",
+				"backgroundColor": "#FFFFFF"
+			}
+		},
+		"orientation": "portrait",
+		"newArchEnabled": true,
+		"userInterfaceStyle": "light"
+	}
 }
