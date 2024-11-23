@@ -11,13 +11,17 @@ import {
 } from "@expo-google-fonts/inter";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+
+GoogleSignin.configure({
+	webClientId:
+		"539040936256-a8hnr7gpfvp71fqp63v9hshnq6sgicaa.apps.googleusercontent.com",
+	iosClientId:
+		"539040936256-mes5nkg0pesarhr5kqbogn4t9t58pvs0.apps.googleusercontent.com",
+	offlineAccess: true,
+});
 
 SplashScreen.preventAutoHideAsync();
-
-// SplashScreen.setOptions({
-// 	fade: true,
-// 	duration: 500,
-// });
 
 export default function RootLayout() {
 	const [loaded] = useFonts({

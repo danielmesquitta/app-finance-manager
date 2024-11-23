@@ -1,7 +1,9 @@
 {
 	"expo": {
 		"ios": {
-			"supportsTablet": true
+			"supportsTablet": true,
+			"usesAppleSignIn": true,
+			"bundleIdentifier": "br.com.finances"
 		},
 		"web": {
 			"bundler": "metro",
@@ -19,23 +21,37 @@
 		"version": "1.0.0",
 		"plugins": [
 			"expo-router",
+			"expo-apple-authentication",
 			[
 				"expo-splash-screen",
 				{
 					"image": "./src/assets/splash-icon.png",
-					"imageWidth": 258,
+					"imageWidth": 200,
 					"resizeMode": "contain"
+				}
+			],
+			[
+				"@react-native-google-signin/google-signin",
+				{
+					"iosUrlScheme": "com.googleusercontent.apps.539040936256-mes5nkg0pesarhr5kqbogn4t9t58pvs0"
 				}
 			]
 		],
 		"android": {
+			"package": "br.com.finances",
 			"adaptiveIcon": {
 				"foregroundImage": "./src/assets/adaptive-icon.png",
 				"backgroundColor": "#FFFFFF"
 			}
 		},
+		"experiments": {
+			"typedRoutes": true
+		},
 		"orientation": "portrait",
 		"newArchEnabled": true,
+		"androidStatusBar": {
+			"translucent": true
+		},
 		"userInterfaceStyle": "light"
 	}
 }

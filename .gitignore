@@ -130,6 +130,11 @@ dist
 .pnp.*
 
 # Expo
+/ios
+/android
+**/android/build/
+**/android/.gradle
+
 .expo/
 web-build/
 expo-env.d.ts
