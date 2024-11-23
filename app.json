@@ -5,10 +5,6 @@
 			"usesAppleSignIn": true,
 			"bundleIdentifier": "br.com.finances"
 		},
-		"web": {
-			"bundler": "metro",
-			"favicon": "./src/assets/favicon.png"
-		},
 		"name": "Finances",
 		"slug": "finances",
 		"icon": "./src/assets/icon.png",
