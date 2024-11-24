@@ -17,14 +17,30 @@
 		"version": "1.0.0",
 		"plugins": [
 			"expo-router",
+			"react-native-bottom-tabs",
 			"expo-apple-authentication",
-			"react-native-edge-to-edge",
 			[
 				"expo-splash-screen",
 				{
 					"image": "./src/assets/splash-icon.png",
 					"imageWidth": 200,
 					"resizeMode": "contain"
+				}
+			],
+			[
+				"expo-build-properties",
+				{
+					"ios": {
+						"useFrameworks": "static"
+					}
+				}
+			],
+			[
+				"react-native-edge-to-edge",
+				{
+					"android": {
+						"parentTheme": "Material3"
+					}
 				}
 			],
 			[

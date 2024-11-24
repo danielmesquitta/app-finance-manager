@@ -9,8 +9,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LogoApple, LogoGoogle } from "@/assets/app";
 import { Text } from "@/components";
+import { useRouter } from "expo-router";
 
 export default function App() {
+	const { replace } = useRouter();
+
 	async function handleAppleAuthentication() {
 		await AppleAuthentication.signInAsync({
 			requestedScopes: [
@@ -20,6 +23,8 @@ export default function App() {
 		})
 			.then(async (credential) => {
 				console.log({ credential });
+
+				replace("/app");
 			})
 			.catch((err) => {
 				if (err.code === "ERR_REQUEST_CANCELED") {
@@ -40,6 +45,8 @@ export default function App() {
 
 			if (isSuccessResponse(response)) {
 				console.log({ userInfo: response.data });
+
+				replace("/app");
 
 				return;
 			}
