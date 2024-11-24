@@ -1,13 +1,13 @@
-import { View } from "react-native";
+import { Platform, TouchableOpacity, View } from "react-native";
 import * as AppleAuthentication from "expo-apple-authentication";
 import {
 	statusCodes,
 	GoogleSignin,
 	isErrorWithCode,
 	isSuccessResponse,
-	GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LogoApple, LogoGoogle } from "@/assets/app";
 import { Text } from "@/components";
 
 export default function App() {
@@ -67,26 +67,40 @@ export default function App() {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<View className="flex-1">
-				<Text>Hello World</Text>
+			<View className="flex-1 p-7">
+				<Text className="text-gray-400">Bem-vindo ao Finance!</Text>
 
-				<AppleAuthentication.AppleAuthenticationButton
-					style={{
-						width: 200,
-						height: 44,
-					}}
-					onPress={handleAppleAuthentication}
-					buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-					buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-					cornerRadius={8}
-				/>
+				<Text className="text-2xl font-jakarta-600 mt-2">
+					Planejamento financeiro em um único lugar!
+				</Text>
 
-				<GoogleSigninButton
-					size={GoogleSigninButton.Size.Standard}
-					color={GoogleSigninButton.Color.Light}
-					onPress={handleGoogleAuthentication}
-					// disabled={isInProgress}
-				/>
+				<View className="rounded-xl bg-white my-12 flex-1" />
+
+				<View className="gap-4">
+					{Platform.OS === "ios" && (
+						<TouchableOpacity
+							onPress={handleAppleAuthentication}
+							className="rounded-xl p-3 bg-black flex-row items-center justify-center gap-4 border border-solid border-black"
+						>
+							<Text className="text-white font-jakarta-600">
+								Entrar com a Apple
+							</Text>
+
+							<LogoApple />
+						</TouchableOpacity>
+					)}
+
+					<TouchableOpacity
+						onPress={handleGoogleAuthentication}
+						className="rounded-xl p-3 bg-white flex-row items-center justify-center gap-4 border border-solid border-gray-100"
+					>
+						<Text className="text-black font-jakarta-600">
+							Entrar com a Google
+						</Text>
+
+						<LogoGoogle />
+					</TouchableOpacity>
+				</View>
 			</View>
 		</SafeAreaView>
 	);

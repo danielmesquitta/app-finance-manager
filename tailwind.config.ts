@@ -9,6 +9,7 @@ export default {
 			fontFamily: {
 				"jakarta-400": ["PlusJakartaSans_400Regular"],
 				"jakarta-500": ["PlusJakartaSans_500Medium"],
+				"jakarta-600": ["PlusJakartaSans_600SemiBold"],
 				"jakarta-700": ["PlusJakartaSans_700Bold"],
 			},
 		},
