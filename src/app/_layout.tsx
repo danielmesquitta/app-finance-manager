@@ -5,13 +5,14 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Stack } from "expo-router";
 import {
 	useFonts,
-	Inter_700Bold,
-	Inter_500Medium,
-	Inter_400Regular,
-} from "@expo-google-fonts/inter";
+	PlusJakartaSans_700Bold,
+	PlusJakartaSans_500Medium,
+	PlusJakartaSans_400Regular,
+} from "@expo-google-fonts/plus-jakarta-sans";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { colors } from "@/styles";
 
 GoogleSignin.configure({
 	webClientId:
@@ -25,9 +26,9 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 	const [loaded] = useFonts({
-		Inter_700Bold,
-		Inter_500Medium,
-		Inter_400Regular,
+		PlusJakartaSans_700Bold,
+		PlusJakartaSans_500Medium,
+		PlusJakartaSans_400Regular,
 	});
 
 	useEffect(() => {
@@ -41,6 +42,9 @@ export default function RootLayout() {
 			<Stack
 				screenOptions={{
 					headerShown: false,
+					contentStyle: {
+						backgroundColor: colors.gray[50],
+					},
 				}}
 			/>
 		</GestureHandlerRootView>

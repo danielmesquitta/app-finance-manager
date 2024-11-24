@@ -7,9 +7,9 @@ export default {
 			colors,
 
 			fontFamily: {
-				"inter-400": ["Inter_400Regular"],
-				"inter-500": ["Inter_500Medium"],
-				"inter-700": ["Inter_700Bold"],
+				"jakarta-400": ["PlusJakartaSans_400Regular"],
+				"jakarta-500": ["PlusJakartaSans_500Medium"],
+				"jakarta-700": ["PlusJakartaSans_700Bold"],
 			},
 		},
 	},

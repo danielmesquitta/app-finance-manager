@@ -7,6 +7,7 @@ import {
 	isSuccessResponse,
 	GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
 	async function handleAppleAuthentication() {
@@ -64,26 +65,28 @@ export default function App() {
 	}
 
 	return (
-		<View className="flex-1 items-center justify-center">
-			<Text>Hello World</Text>
+		<SafeAreaView style={{ flex: 1 }}>
+			<View className="flex-1">
+				<Text>Hello World</Text>
 
-			<AppleAuthentication.AppleAuthenticationButton
-				style={{
-					width: 200,
-					height: 44,
-				}}
-				onPress={handleAppleAuthentication}
-				buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-				buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-				cornerRadius={8}
-			/>
+				<AppleAuthentication.AppleAuthenticationButton
+					style={{
+						width: 200,
+						height: 44,
+					}}
+					onPress={handleAppleAuthentication}
+					buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+					buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+					cornerRadius={8}
+				/>
 
-			<GoogleSigninButton
-				size={GoogleSigninButton.Size.Standard}
-				color={GoogleSigninButton.Color.Light}
-				onPress={handleGoogleAuthentication}
-				// disabled={isInProgress}
-			/>
-		</View>
+				<GoogleSigninButton
+					size={GoogleSigninButton.Size.Standard}
+					color={GoogleSigninButton.Color.Light}
+					onPress={handleGoogleAuthentication}
+					// disabled={isInProgress}
+				/>
+			</View>
+		</SafeAreaView>
 	);
 }
