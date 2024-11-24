@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import * as AppleAuthentication from "expo-apple-authentication";
 import {
 	statusCodes,
@@ -8,6 +8,7 @@ import {
 	GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Text } from "@/components";
 
 export default function App() {
 	async function handleAppleAuthentication() {
