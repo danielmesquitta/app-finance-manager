@@ -16,10 +16,8 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { colors } from "@/styles";
 
 GoogleSignin.configure({
-	webClientId:
-		"539040936256-a8hnr7gpfvp71fqp63v9hshnq6sgicaa.apps.googleusercontent.com",
-	iosClientId:
-		"539040936256-mes5nkg0pesarhr5kqbogn4t9t58pvs0.apps.googleusercontent.com",
+	webClientId: `${process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID}.apps.googleusercontent.com`,
+	iosClientId: `${process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID}.apps.googleusercontent.com`,
 	offlineAccess: true,
 });
 
