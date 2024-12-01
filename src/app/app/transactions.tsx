@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 export default function TransactionsPage() {
 	return (
-		<View>
+		<View className="flex-1 items-center justify-center">
 			<Text>Transações</Text>
 		</View>
 	);

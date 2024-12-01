@@ -19,7 +19,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	version: "1.0.0",
 	plugins: [
 		"expo-router",
-		"react-native-bottom-tabs",
 		"expo-apple-authentication",
 		[
 			"expo-splash-screen",
