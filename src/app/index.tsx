@@ -1,114 +1,141 @@
-import { Platform, TouchableOpacity, View } from "react-native";
-import * as AppleAuthentication from "expo-apple-authentication";
-import {
-	statusCodes,
-	GoogleSignin,
-	isErrorWithCode,
-	isSuccessResponse,
-} from "@react-native-google-signin/google-signin";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { LogoApple, LogoGoogle } from "@/assets/app";
 import { Text } from "@/components";
+import { api } from "@/services/api";
+import {
+  GoogleSignin,
+  isErrorWithCode,
+  isSuccessResponse,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+import * as AppleAuthentication from "expo-apple-authentication";
 import { useRouter } from "expo-router";
+import { Platform, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
-	const { replace } = useRouter();
+  const { replace } = useRouter();
 
-	async function handleAppleAuthentication() {
-		await AppleAuthentication.signInAsync({
-			requestedScopes: [
-				AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-				AppleAuthentication.AppleAuthenticationScope.EMAIL,
-			],
-		})
-			.then(async (credential) => {
-				console.log({ credential });
+  async function handleAppleAuthentication() {
+    await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    })
+      .then(async (credential) => {
+        console.log({ credential });
 
-				replace("/app");
-			})
-			.catch((err) => {
-				if (err.code === "ERR_REQUEST_CANCELED") {
-					// Handle that the user canceled the sign-in flow
+        credential.identityToken;
 
-					return;
-				}
+        const { data } = await api.post(
+          "/v1/auth/sign-in",
+          { provider: "APPLE" },
+          {
+            headers: {
+              Authorization: `Bearer ${credential.identityToken}`,
+            },
+          }
+        );
 
-				// Handle other errors
-			});
-	}
+        console.log(data);
 
-	async function handleGoogleAuthentication() {
-		try {
-			await GoogleSignin.hasPlayServices();
+        replace("/app");
+      })
+      .catch((err) => {
+        if (err.code === "ERR_REQUEST_CANCELED") {
+          // Handle that the user canceled the sign-in flow
 
-			const response = await GoogleSignin.signIn();
+          return;
+        }
 
-			if (isSuccessResponse(response)) {
-				console.log({ userInfo: response.data });
+        // Handle other errors
+      });
+  }
 
-				replace("/app");
+  async function handleGoogleAuthentication() {
+    try {
+      await GoogleSignin.hasPlayServices();
 
-				return;
-			}
+      const response = await GoogleSignin.signIn();
 
-			// Sign in was cancelled by user
-		} catch (error) {
-			if (isErrorWithCode(error)) {
-				switch (error.code) {
-					case statusCodes.IN_PROGRESS:
-						// Operation (eg. sign in) already in progress
-						break;
-					case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-						// Android only, play services not available or outdated
-						break;
-					default:
-					// Some other error happened
-				}
+      if (isSuccessResponse(response)) {
+        const tokens = await GoogleSignin.getTokens();
 
-				return;
-			}
+        const { data } = await api.post(
+          "/v1/auth/sign-in",
+          { provider: "GOOGLE" },
+          {
+            headers: {
+              Authorization: `Bearer ${tokens.accessToken}`,
+            },
+          }
+        );
 
-			// An error that's not related to google sign in occurred
-		}
-	}
+        console.log(data);
 
-	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<View className="flex-1 p-7">
-				<Text className="text-gray-400">Bem-vindo ao Finance!</Text>
+        replace("/app");
 
-				<Text className="text-2xl font-jakarta-600 mt-2">
-					Planejamento financeiro em um único lugar!
-				</Text>
+        return;
+      }
 
-				<View className="rounded-xl bg-white my-12 flex-1" />
+      // Sign in was cancelled by user
+    } catch (error) {
+      if (isErrorWithCode(error)) {
+        switch (error.code) {
+          case statusCodes.IN_PROGRESS:
+            // Operation (eg. sign in) already in progress
+            break;
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+            // Android only, play services not available or outdated
+            break;
+          default:
+          // Some other error happened
+        }
 
-				<View className="gap-4">
-					{Platform.OS === "ios" && (
-						<TouchableOpacity
-							onPress={handleAppleAuthentication}
-							className="rounded-xl p-3 bg-black flex-row items-center justify-center gap-4 border border-solid border-black"
-						>
-							<Text className="text-white font-jakarta-600">
-								Entrar com a Apple
-							</Text>
+        return;
+      }
 
-							<LogoApple />
-						</TouchableOpacity>
-					)}
+      // An error that's not related to google sign in occurred
+    }
+  }
 
-					<TouchableOpacity
-						onPress={handleGoogleAuthentication}
-						className="rounded-xl p-3 bg-white flex-row items-center justify-center gap-4 border border-solid border-gray-100"
-					>
-						<Text className="text-black font-jakarta-600">
-							Entrar com a Google
-						</Text>
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View className="flex-1 p-7">
+        <Text className="text-gray-400">Bem-vindo ao Finance!</Text>
 
-						<LogoGoogle />
-					</TouchableOpacity>
-				</View>
-			</View>
-		</SafeAreaView>
-	);
+        <Text className="text-2xl font-jakarta-600 mt-2">
+          Planejamento financeiro em um único lugar!
+        </Text>
+
+        <View className="rounded-xl bg-white my-12 flex-1" />
+
+        <View className="gap-4">
+          {Platform.OS === "ios" && (
+            <TouchableOpacity
+              onPress={handleAppleAuthentication}
+              className="rounded-xl p-3 bg-black flex-row items-center justify-center gap-4 border border-solid border-black"
+            >
+              <Text className="text-white font-jakarta-600">
+                Entrar com a Apple
+              </Text>
+
+              <LogoApple />
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            onPress={handleGoogleAuthentication}
+            className="rounded-xl p-3 bg-white flex-row items-center justify-center gap-4 border border-solid border-gray-100"
+          >
+            <Text className="text-black font-jakarta-600">
+              Entrar com a Google
+            </Text>
+
+            <LogoGoogle />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
 }
