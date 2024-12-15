@@ -6,7 +6,9 @@ import {
 	type ComponentPropsWithoutRef,
 	type ElementRef,
 	forwardRef,
+	type ReactNode,
 } from "react";
+import { Loading } from "./loading";
 
 const buttonVariants = cva(
 	"group flex items-center justify-center rounded-md",
@@ -57,10 +59,15 @@ const buttonTextVariants = cva("text-base font-medium", {
 });
 
 type ButtonProps = ComponentPropsWithoutRef<typeof Pressable> &
-	VariantProps<typeof buttonVariants>;
+	VariantProps<typeof buttonVariants> & {
+		loading?: boolean;
+	};
 
 const Button = forwardRef<ElementRef<typeof Pressable>, ButtonProps>(
-	({ className, variant, size, ...props }, ref) => {
+	(
+		{ className, variant, size, children, disabled, loading, ...props },
+		ref,
+	) => {
 		return (
 			<TextClassContext.Provider
 				value={buttonTextVariants({
@@ -70,13 +77,17 @@ const Button = forwardRef<ElementRef<typeof Pressable>, ButtonProps>(
 			>
 				<Pressable
 					ref={ref}
-					role="button"
 					className={cn(
-						props.disabled && "opacity-50",
+						disabled && "opacity-50",
 						buttonVariants({ variant, size, className }),
 					)}
+					disabled={disabled || loading}
 					{...props}
-				/>
+				>
+					{children as ReactNode}
+
+					{loading && <Loading />}
+				</Pressable>
 			</TextClassContext.Provider>
 		);
 	},
