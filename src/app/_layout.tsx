@@ -14,6 +14,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { colors } from "@/styles";
+import { Toasts } from "@backpackapp-io/react-native-toast";
 
 GoogleSignin.configure({
 	webClientId: `${process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID}.apps.googleusercontent.com`,
@@ -44,6 +45,18 @@ export default function RootLayout() {
 					headerShown: false,
 					contentStyle: {
 						backgroundColor: colors.gray[50],
+					},
+				}}
+			/>
+
+			<Toasts
+				defaultStyle={{
+					view: {
+						borderRadius: 8,
+					},
+					indicator: {
+						width: 12,
+						height: 12,
 					},
 				}}
 			/>
