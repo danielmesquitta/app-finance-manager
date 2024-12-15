@@ -1,7 +1,6 @@
 import { LogoApple, LogoGoogle } from "@/assets/app";
 import { Text } from "@/components";
 import { auth } from "@/contracts";
-import { api } from "@/services/api";
 import { toast } from "@backpackapp-io/react-native-toast";
 import {
 	GoogleSignin,
