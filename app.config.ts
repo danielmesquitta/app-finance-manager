@@ -18,8 +18,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	version: "1.0.0",
 	plugins: [
-		"expo-router",
 		"expo-apple-authentication",
+		[
+			"expo-router",
+			{
+				asyncRoutes: {
+					ios: true,
+					android: true,
+					default: "development",
+				},
+			},
+		],
 		[
 			"expo-splash-screen",
 			{

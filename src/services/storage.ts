@@ -1,6 +1,11 @@
-import type { AuthResponse } from "@/contracts";
 import type { User } from "@/models";
 import { MMKV } from "react-native-mmkv";
+
+interface AuthSession {
+	user: User;
+	accessToken: string;
+	refreshToken: string;
+}
 
 export const storage = new MMKV();
 
@@ -48,7 +53,7 @@ export function setAuthSession({
 	user,
 	accessToken,
 	refreshToken,
-}: AuthResponse) {
+}: AuthSession) {
 	setItem({ key: StorageKey.USER, value: JSON.stringify(user) });
 	setItem({ key: StorageKey.TOKEN, value: accessToken });
 	setItem({ key: StorageKey.REFRESH_TOKEN, value: refreshToken });

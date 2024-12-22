@@ -1,7 +1,8 @@
 import { LogoApple, LogoGoogle } from "@/assets/app";
 import { Loading, Text } from "@/components";
 import { auth } from "@/contracts";
-import { setAuthSession } from "@/services";
+import { getItem, setAuthSession, StorageKey } from "@/services";
+import { delay } from "@/utils";
 import { toast } from "@backpackapp-io/react-native-toast";
 import {
 	GoogleSignin,
@@ -11,7 +12,7 @@ import {
 } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Platform, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -19,6 +20,20 @@ export default function App() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { replace } = useRouter();
+
+	useEffect(() => {
+		async function run() {
+			await delay(1000);
+
+			const session = getItem({ key: StorageKey.TOKEN });
+
+			console.log({ session });
+
+			if (session) replace("/app");
+		}
+
+		run();
+	}, [replace]);
 
 	async function handleAppleAuthentication() {
 		setIsLoading(true);
@@ -35,7 +50,11 @@ export default function App() {
 					provider: "APPLE",
 				});
 
-				setAuthSession(data);
+				setAuthSession({
+					user: data.user,
+					accessToken: data.access_token,
+					refreshToken: data.refresh_token,
+				});
 
 				replace("/app");
 			})
@@ -64,7 +83,11 @@ export default function App() {
 				provider: "GOOGLE",
 			})
 				.then(({ data }) => {
-					setAuthSession(data);
+					setAuthSession({
+						user: data.user,
+						accessToken: data.access_token,
+						refreshToken: data.refresh_token,
+					});
 
 					replace("/app");
 				})
