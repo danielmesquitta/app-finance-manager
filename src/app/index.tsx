@@ -27,8 +27,6 @@ export default function App() {
 
 			const session = getItem({ key: StorageKey.TOKEN });
 
-			console.log({ session });
-
 			if (session) replace("/app");
 		}
 

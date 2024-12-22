@@ -8,5 +8,10 @@ export const colors = {
 	white: "#FFF",
 	black: "#000",
 
+	primary: {
+		400: "#FC6C45",
+		500: "#FA3D15",
+	},
+
 	transparent: "transparent",
 };

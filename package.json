@@ -16,6 +16,7 @@
     "@backpackapp-io/react-native-toast": "^0.13.0",
     "@expo-google-fonts/plus-jakarta-sans": "^0.2.3",
     "@react-native-google-signin/google-signin": "^13.1.0",
+    "@rn-primitives/avatar": "^1.1.0",
     "@rn-primitives/slot": "^1.1.0",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",

@@ -8,9 +8,11 @@ export { default as IconChartBar } from "./icon-chart-bar.svg";
 
 export { default as IconSmartHome } from "./icon-smart-home.svg";
 
-export { default as IconCreditCardPay } from "./icon-credit-card-pay.svg";
-
 export { default as IconCoinsActive } from "./icon-coins-active.svg";
+
+export { default as IconChevronRight } from "./icon-chevron-right.svg";
+
+export { default as IconCreditCardPay } from "./icon-credit-card-pay.svg";
 
 export { default as IconChartBarActive } from "./icon-chart-bar-active.svg";
 

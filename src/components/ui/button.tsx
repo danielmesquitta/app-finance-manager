@@ -11,21 +11,18 @@ import {
 import { Loading } from "./loading";
 
 const buttonVariants = cva(
-	"group flex items-center justify-center rounded-md",
+	"flex flex-row items-center justify-center rounded-xl gap-3",
 	{
 		variants: {
 			variant: {
-				ghost: "active:bg-accent",
-				default: "bg-primary active:opacity-90",
-				outline: "border border-input bg-background active:bg-accent",
-				secondary: "bg-secondary active:opacity-80",
-				destructive: "bg-destructive active:opacity-90",
+				default: "bg-primary-500",
+				secondary: "bg-secondary",
+				destructive: "bg-destructive",
 			},
 			size: {
 				sm: "h-9 rounded-md px-3",
-				lg: "rounded-md px-8 h-14",
-				icon: "size-10",
-				default: "h-12 px-5 py-3",
+				lg: "px-8 h-14",
+				default: "h-12 px-4 py-3",
 			},
 		},
 		defaultVariants: {
@@ -35,26 +32,22 @@ const buttonVariants = cva(
 	},
 );
 
-const buttonTextVariants = cva("text-base font-medium", {
+const buttonTextVariants = cva("font-jakarta-600", {
 	variants: {
 		variant: {
-			ghost: "group-active:text-accent-foreground",
-			default: "text-primary-foreground",
-			outline: "group-active:text-accent-foreground",
-			secondary:
-				"text-secondary-foreground group-active:text-secondary-foreground",
+			default: "text-white",
+			secondary: "text-secondary-foreground",
 			destructive: "text-destructive-foreground",
 		},
 		size: {
-			sm: "",
+			sm: "text-sm",
 			lg: "text-lg",
-			icon: "",
-			default: "",
+			default: "text-sm",
 		},
 	},
 	defaultVariants: {
-		variant: "default",
 		size: "default",
+		variant: "default",
 	},
 });
 
