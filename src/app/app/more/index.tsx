@@ -58,7 +58,7 @@ const routes = {
 		{
 			icon: IconCalculator,
 			label: "Calculadoras",
-			route: "/app/more/tools/calculators",
+			route: "/app/more/calculators",
 		},
 		{
 			icon: IconSmartHome,
