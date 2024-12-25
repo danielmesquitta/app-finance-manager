@@ -1,4 +1,13 @@
-import { IconChevronRight } from "@/assets/app";
+import {
+	IconBell,
+	IconCalculator,
+	IconChevronRight,
+	IconFileDescription,
+	IconMessageStar,
+	IconNotes,
+	IconSmartHome,
+	IconUserSquare,
+} from "@/assets/app";
 import {
 	Avatar,
 	AvatarFallback,
@@ -10,7 +19,98 @@ import { useSafeArea } from "@/hooks";
 import { getUser } from "@/services";
 import { colors } from "@/styles";
 import { formatInitials } from "@/utils";
+import { Link, type RelativePathString } from "expo-router";
+import type { FC } from "react";
 import { View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import type { SvgProps } from "react-native-svg";
+
+type CardOption = {
+	icon: FC<SvgProps>;
+	label: string;
+	route: string;
+};
+
+interface CardProps {
+	title: string;
+	options: CardOption[];
+}
+
+const routes = {
+	help: [
+		{
+			icon: IconMessageStar,
+			label: "Feedbacks",
+			route: "/app/more/feedbacks",
+		},
+		{
+			icon: IconNotes,
+			label: "Políticas de privacidade",
+			route: "/app/more/privacy-policies",
+		},
+		{
+			icon: IconFileDescription,
+			label: "Termos de uso",
+			route: "/app/more/terms-of-use",
+		},
+	],
+	tools: [
+		{
+			icon: IconCalculator,
+			label: "Calculadoras",
+			route: "/app/more/tools/calculators",
+		},
+		{
+			icon: IconSmartHome,
+			label: "Chat",
+			route: "/app/more/chat",
+		},
+	],
+	preferences: [
+		{
+			icon: IconUserSquare,
+			label: "Meu perfil",
+			route: "/app/more/profile",
+		},
+		{
+			icon: IconBell,
+			label: "Notificações",
+			route: "/app/more/notifications",
+		},
+	],
+};
+
+function Card({ title, options }: CardProps) {
+	return (
+		<View className="bg-white p-4 rounded-xl">
+			<Text className="text-xs text-gray-400 font-jakarta-500 mb-4">
+				{title}
+			</Text>
+
+			{options.map(({ icon: Icon, label, route }, index) => (
+				<View key={label}>
+					{index > 0 && <View className="h-px my-4 bg-gray-50 w-full" />}
+
+					<Link href={route as RelativePathString}>
+						<View className="flex-row items-center gap-4 w-full">
+							<View className="p-1.5 bg-gray-50 rounded-xl">
+								<Icon color={colors.gray[400]} />
+							</View>
+
+							<Text className="text-sm font-jakarta-500">{label}</Text>
+
+							<IconChevronRight
+								color={colors.gray[400]}
+								width={16}
+								style={{ marginLeft: "auto" }}
+							/>
+						</View>
+					</Link>
+				</View>
+			))}
+		</View>
+	);
+}
 
 export default function MorePage() {
 	const user = getUser();
@@ -44,6 +144,16 @@ export default function MorePage() {
 					<IconChevronRight color={colors.white} opacity={0.5} />
 				</Button>
 			</View>
+
+			<ScrollView className="flex-1 w-full">
+				<View className="flex-1 p-7 gap-7">
+					<Card title="Ferramentas" options={routes.tools} />
+
+					<Card title="Preferências" options={routes.preferences} />
+
+					<Card title="Ajuda" options={routes.help} />
+				</View>
+			</ScrollView>
 		</View>
 	);
 }

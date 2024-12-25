@@ -16,6 +16,8 @@ import { useEffect } from "react";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { colors } from "@/styles";
 import { Toasts } from "@backpackapp-io/react-native-toast";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/services";
 
 GoogleSignin.configure({
 	webClientId: `${process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID}.apps.googleusercontent.com`,
@@ -41,14 +43,16 @@ export default function RootLayout() {
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
-			<Stack
-				screenOptions={{
-					headerShown: false,
-					contentStyle: {
-						backgroundColor: colors.gray[50],
-					},
-				}}
-			/>
+			<QueryClientProvider client={queryClient}>
+				<Stack
+					screenOptions={{
+						headerShown: false,
+						contentStyle: {
+							backgroundColor: colors.gray[50],
+						},
+					}}
+				/>
+			</QueryClientProvider>
 
 			<Toasts
 				defaultStyle={{
