@@ -18,6 +18,7 @@ import { colors } from "@/styles";
 import { Toasts } from "@backpackapp-io/react-native-toast";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/services";
+import { PortalHost } from "@rn-primitives/portal";
 
 GoogleSignin.configure({
 	webClientId: `${process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID}.apps.googleusercontent.com`,
@@ -52,6 +53,8 @@ export default function RootLayout() {
 						},
 					}}
 				/>
+
+				<PortalHost />
 			</QueryClientProvider>
 
 			<Toasts
