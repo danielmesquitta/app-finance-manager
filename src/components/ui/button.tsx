@@ -11,13 +11,14 @@ import {
 import { Loading } from "./loading";
 
 const buttonVariants = cva(
-	"flex flex-row items-center justify-center rounded-xl gap-3",
+	"flex flex-row items-center justify-center rounded-xl gap-3 border border-solid border-transparent",
 	{
 		variants: {
 			variant: {
-				default: "bg-primary-500",
+				gray: "bg-transparent border-gray-100",
+				black: "bg-black border-black",
+				default: "bg-primary-500 border-primary-500",
 				secondary: "bg-secondary",
-				destructive: "bg-destructive",
 			},
 			size: {
 				sm: "h-9 rounded-md px-3",
@@ -35,9 +36,10 @@ const buttonVariants = cva(
 const buttonTextVariants = cva("font-jakarta-600", {
 	variants: {
 		variant: {
+			gray: "text-gray-500",
+			black: "text-white",
 			default: "text-white",
 			secondary: "text-secondary-foreground",
-			destructive: "text-destructive-foreground",
 		},
 		size: {
 			sm: "text-sm",
@@ -70,11 +72,11 @@ const Button = forwardRef<ElementRef<typeof Pressable>, ButtonProps>(
 			>
 				<Pressable
 					ref={ref}
+					disabled={disabled || loading}
 					className={cn(
 						disabled && "opacity-50",
 						buttonVariants({ variant, size, className }),
 					)}
-					disabled={disabled || loading}
 					{...props}
 				>
 					{children as ReactNode}
