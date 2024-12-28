@@ -1,0 +1,169 @@
+import {
+	CalculatorFeedbackBackground,
+	IconArrowNarrowRight,
+	IconFriends,
+	IconHelpCircle,
+	IconOld,
+	IconTargetArrow,
+	IconWallet,
+} from "@/assets/app";
+import { Text, Button } from "@/components";
+import { getUser } from "@/services";
+import { useCalculatorStore } from "@/store";
+import { colors } from "@/styles";
+import { cn, masks } from "@/utils";
+import { useRouter } from "expo-router";
+import type { FC } from "react";
+import { TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import type { SvgProps } from "react-native-svg";
+
+interface FeedbackItemProps {
+	icon: FC<SvgProps>;
+	type?: "RED" | "GRAY" | "GREEN";
+	title: string;
+	value: string;
+}
+
+function FeedbackItem({
+	icon: Icon,
+	type = "GRAY",
+	title,
+	value,
+}: FeedbackItemProps) {
+	const iconColor = {
+		RED: colors.red[500],
+		GRAY: colors.gray[400],
+		GREEN: colors.green[500],
+	};
+
+	return (
+		<View className="flex-row items-center gap-4">
+			<View
+				className={cn(
+					"p-2 rounded-lg border border-solid",
+					type === "RED" && "bg-red-500/5 border-red-500/10",
+					type === "GRAY" && "bg-gray-50 border-gray-50",
+					type === "GREEN" && "bg-green-500/5 border-green-500/10",
+				)}
+			>
+				<Icon width={24} color={iconColor[type]} />
+			</View>
+
+			<View className="gap-1">
+				<Text className="text-xs text-gray-400">{title}</Text>
+				<Text
+					className={cn(
+						"text-black font-jakarta-600",
+						type !== "GREEN" && "text-sm",
+					)}
+				>
+					{value}
+				</Text>
+			</View>
+
+			{type !== "GREEN" && (
+				<TouchableOpacity className="p-1.5 rounded-lg border border-solid border-gray-100 ml-auto">
+					<IconHelpCircle width={16} color={colors.gray[500]} />
+				</TouchableOpacity>
+			)}
+		</View>
+	);
+}
+
+function FeedbackHeader() {
+	const user = getUser();
+
+	const { type } = useCalculatorStore();
+
+	if (!user) return null;
+
+	return (
+		<View className="px-8">
+			{type === "RETIREMENT" && (
+				<Text className="text-center text-xl font-jakarta-600 text-gray-500">
+					<Text className="text-black text-xl font-jakarta-600">
+						Parabéns {user.name.split(" ")[0]}!
+					</Text>{" "}
+					Você atingiu sua meta de aposentadoria com os investimentos atuais.
+				</Text>
+			)}
+		</View>
+	);
+}
+
+export default function Feedback() {
+	const { push, back } = useRouter();
+
+	const { type, data } = useCalculatorStore();
+
+	console.log({ type, data });
+
+	return (
+		<View className="flex-1">
+			<ScrollView className="flex-1">
+				<CalculatorFeedbackBackground style={{ position: "absolute" }} />
+
+				<View className="flex-1 px-7 pb-7 pt-64 gap-7">
+					<FeedbackHeader />
+
+					<View className="bg-white p-4 rounded-xl">
+						<FeedbackItem
+							icon={IconWallet}
+							type="GREEN"
+							title="Você se aposentará com:"
+							value={masks.currency(data.property_on_retirement)}
+						/>
+					</View>
+
+					<View className="bg-white p-4 rounded-xl">
+						<Text className="text-xs text-gray-400 font-jakarta-500 mb-5">
+							Resultados
+						</Text>
+
+						<FeedbackItem
+							icon={IconOld}
+							title="Você poderá gastar por mês:"
+							value={masks.currency(data.max_monthly_expenses)}
+						/>
+
+						<View className="h-px bg-gray-50 w-full my-5" />
+
+						<FeedbackItem
+							icon={IconFriends}
+							type={data.heritage > 0 ? "GRAY" : "RED"}
+							title="Deixará de herança:"
+							value={
+								data.heritage > 0
+									? masks.currency(data.heritage)
+									: "Não haverá herança"
+							}
+						/>
+
+						<View className="h-px bg-gray-50 w-full my-5" />
+
+						<FeedbackItem
+							icon={IconTargetArrow}
+							title="Você ultrapassou da sua meta:"
+							value={masks.currency(
+								data.exceeded_goal_amount > 0 ? data.exceeded_goal_amount : 0,
+							)}
+						/>
+					</View>
+				</View>
+			</ScrollView>
+
+			<View className="flex-row justify-end items-center gap-4 bg-white w-full py-4 px-7">
+				<Button variant="gray" onPress={back}>
+					<Text>Calcular novamente</Text>
+				</Button>
+
+				<Button variant="black" onPress={() => push("/app/more/calculators")}>
+					<Text>Finalizar</Text>
+
+					<IconArrowNarrowRight color={colors.white} />
+				</Button>
+			</View>
+		</View>
+	);
+}

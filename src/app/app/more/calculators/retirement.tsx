@@ -23,6 +23,7 @@ import { masks } from "@/utils";
 import { useState } from "react";
 import { calculateRetirement } from "@/contracts";
 import { toast } from "@backpackapp-io/react-native-toast";
+import { useCalculatorStore } from "@/store";
 
 const schema = z.object({
 	age: z.coerce
@@ -55,9 +56,18 @@ const schema = z.object({
 		.transform((value) => Number(masks.clear(value)))
 		.default("0"),
 	income_investment_percentage: z
-		.number({ message: "Digite a porcentagem de investimento" })
-		.min(0, { message: "O valor deve ser maior que 0" })
-		.max(100, { message: "O valor deve ser menor que 100" }),
+		.preprocess(
+			(value) => Number.parseFloat(z.string().parse(value)),
+			z.number({
+				message: "Digite a porcentagem de investimento",
+			}),
+		)
+		.refine((value) => value > 0, {
+			message: "O valor deve ser maior que 0",
+		})
+		.refine((value) => value < 100, {
+			message: "O valor deve ser menor que 100",
+		}),
 });
 
 type FormSchema = z.infer<typeof schema>;
@@ -66,6 +76,8 @@ export default function Retirement() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { push } = useRouter();
+
+	const setCalculator = useCalculatorStore((state) => state.setCalculator);
 
 	const form = useForm<FormSchema>({
 		resolver: zodResolver(schema),
@@ -80,9 +92,13 @@ export default function Retirement() {
 	async function onSubmit(data: FormSchema) {
 		setIsLoading(true);
 
+		console.log({ data });
+
 		await calculateRetirement(data)
 			.then(({ data }) => {
-				console.log({ data });
+				setCalculator({ type: "RETIREMENT", data });
+
+				push("/app/more/calculators/feedback");
 			})
 			.catch((error) =>
 				toast.error(error?.message || "Erro ao calcular aposentadoria"),
@@ -177,9 +193,9 @@ export default function Retirement() {
 											</FormLabel>
 											<FormControl>
 												<Input
-													inputMode="numeric"
+													inputMode="decimal"
 													placeholder="20"
-													keyboardType="numeric"
+													keyboardType="decimal-pad"
 													onChangeText={field.onChange}
 													{...field}
 												/>

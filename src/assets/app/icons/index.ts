@@ -10,7 +10,11 @@ export { default as IconCoins } from "./icon-coins.svg";
 
 export { default as IconHome2 } from "./icon-home-2.svg";
 
+export { default as IconWallet } from "./icon-wallet.svg";
+
 export { default as LogoGoogle } from "./logo-google.svg";
+
+export { default as IconFriends } from "./icon-friends.svg";
 
 export { default as IconChartBar } from "./icon-chart-bar.svg";
 
@@ -22,9 +26,13 @@ export { default as IconCalculator } from "./icon-calculator.svg";
 
 export { default as IconUserSquare } from "./icon-user-square.svg";
 
+export { default as IconHelpCircle } from "./icon-help-circle.svg";
+
 export { default as IconCoinsActive } from "./icon-coins-active.svg";
 
 export { default as IconMessageStar } from "./icon-message-star.svg";
+
+export { default as IconTargetArrow } from "./icon-target-arrow.svg";
 
 export { default as IconMathSymbols } from "./icon-math-symbols.svg";
 

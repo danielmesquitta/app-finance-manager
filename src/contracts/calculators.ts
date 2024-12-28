@@ -13,8 +13,10 @@ interface CalculateRetirementParams {
 	income_investment_percentage: number;
 }
 
-interface CalculateRetirementResponse {
+export interface CalculateRetirementResponse {
 	heritage: number;
+	exceeded_goal: boolean;
+	exceeded_goal_amount: number;
 	achieved_goal_income: boolean;
 	max_monthly_expenses: number;
 	property_on_retirement: number;
