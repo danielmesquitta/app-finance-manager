@@ -95,9 +95,7 @@ function FeedbackHeader() {
 export default function Feedback() {
 	const { push, back } = useRouter();
 
-	const { type, data } = useCalculatorStore();
-
-	console.log({ type, data });
+	const { data } = useCalculatorStore();
 
 	return (
 		<View className="flex-1">

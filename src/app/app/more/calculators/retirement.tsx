@@ -21,18 +21,21 @@ import { IconArrowNarrowRight } from "@/assets/app";
 import { colors } from "@/styles";
 import { masks } from "@/utils";
 import { useState } from "react";
+import { useCalculatorStore } from "@/store";
 import { calculateRetirement } from "@/contracts";
 import { toast } from "@backpackapp-io/react-native-toast";
-import { useCalculatorStore } from "@/store";
 
 const schema = z.object({
 	age: z.coerce
 		.number({ message: "Digite sua idade" })
 		.min(1, { message: "Você precisa ter pelo menos 1 ano" }),
 	interest: z
-		.number({ message: "Digite sua rentabilidade projetada" })
-		.min(0, { message: "Digite sua rentabilidade projetada" })
-		.max(100, { message: "O valor deve ser menor que 100" }),
+		.string({ message: "Digite sua rentabilidade projetada" })
+		.min(1, { message: "Digite sua rentabilidade projetada" })
+		.transform((value) => Number.parseFloat(value.replace(",", ".")))
+		.refine((value) => value > 0 && value < 100, {
+			message: "O valor deve ser maior que 0 e menor que 100",
+		}),
 	goal_income: z
 		.string({ message: "Digite o valor que você quer gastar por mês" })
 		.min(1, { message: "Digite o valor que você quer gastar por mês" })
@@ -56,17 +59,11 @@ const schema = z.object({
 		.transform((value) => Number(masks.clear(value)))
 		.default("0"),
 	income_investment_percentage: z
-		.preprocess(
-			(value) => Number.parseFloat(z.string().parse(value)),
-			z.number({
-				message: "Digite a porcentagem de investimento",
-			}),
-		)
-		.refine((value) => value > 0, {
-			message: "O valor deve ser maior que 0",
-		})
-		.refine((value) => value < 100, {
-			message: "O valor deve ser menor que 100",
+		.string({ message: "Digite a porcentagem de investimento" })
+		.min(1, { message: "Digite a porcentagem de investimento" })
+		.transform((value) => Number.parseFloat(value.replace(",", ".")))
+		.refine((value) => value > 0 && value < 100, {
+			message: "O valor deve ser maior que 0 e menor que 100",
 		}),
 });
 
@@ -91,8 +88,6 @@ export default function Retirement() {
 
 	async function onSubmit(data: FormSchema) {
 		setIsLoading(true);
-
-		console.log({ data });
 
 		await calculateRetirement(data)
 			.then(({ data }) => {
