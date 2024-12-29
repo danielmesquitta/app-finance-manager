@@ -12,6 +12,8 @@ export * from "./button";
 
 export * from "./select";
 
+export * from "./slider";
+
 export * from "./tooltip";
 
 export * from "./loading";

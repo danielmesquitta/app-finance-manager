@@ -19,7 +19,7 @@ export function HeadNavigation({ title }: HeadNavigationProps) {
 			style={{ paddingTop: top + 16 }}
 			className="flex-row items-center justify-between bg-white pb-5 px-7"
 		>
-			<TouchableOpacity onPress={back} className="p-1.5 bg-gray-50 rounded-2xl">
+			<TouchableOpacity onPress={back} className="p-1.5 bg-gray-50 rounded-xl">
 				<IconChevronRight
 					width={20}
 					color={colors.gray[400]}

@@ -12,7 +12,28 @@ const Select = SelectPrimitive.Root;
 
 const SelectGroup = SelectPrimitive.Group;
 
-const SelectValue = SelectPrimitive.Value;
+const SelectValue = forwardRef<
+	SelectPrimitive.ValueRef,
+	SelectPrimitive.ValueProps
+>(({ className, children, ...props }, ref) => {
+	const { value } = SelectPrimitive.useRootContext();
+
+	return (
+		<SelectPrimitive.Value
+			ref={ref}
+			className={cn(
+				"text-sm",
+				value
+					? "text-black font-jakarta-600"
+					: "text-gray-400 font-jakarta-400",
+				className,
+			)}
+			{...props}
+		/>
+	);
+});
+
+SelectValue.displayName = SelectPrimitive.Value.displayName;
 
 const SelectTrigger = forwardRef<
 	SelectPrimitive.TriggerRef,
@@ -21,7 +42,7 @@ const SelectTrigger = forwardRef<
 	<SelectPrimitive.Trigger
 		ref={ref}
 		className={cn(
-			"flex-row items-center justify-between h-14 rounded-xl border border-solid border-gray-100 bg-white px-4 text-sm text-black font-jakarta-600",
+			"flex-row items-center justify-between h-14 rounded-xl border border-solid border-gray-100 bg-white px-4",
 			props.disabled && "opacity-50",
 			className,
 		)}
@@ -47,12 +68,10 @@ const SelectContent = forwardRef<
 						ref={ref}
 						position={position}
 						className={cn(
-							"relative z-50 max-h-96 min-w-[8rem] rounded-xl border border-solid border-gray-100 bg-white py-2 px-1 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-							position === "popper" &&
-								"data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
-
+							"relative z-50 max-h-96 min-w-[20rem] rounded-xl border border-solid border-gray-100 bg-white py-2",
 							className,
 						)}
+						sideOffset={8}
 						{...props}
 					>
 						<SelectPrimitive.Viewport
@@ -90,24 +109,34 @@ SelectLabel.displayName = SelectPrimitive.Label.displayName;
 const SelectItem = forwardRef<
 	SelectPrimitive.ItemRef,
 	SelectPrimitive.ItemProps
->(({ className, children, ...props }, ref) => (
-	<SelectPrimitive.Item
-		ref={ref}
-		className={cn(
-			"relative flex-row w-full",
-			props.disabled && "opacity-50",
-			className,
-		)}
-		{...props}
-	>
-		<View className="absolute left-3.5 flex size-3.5 pt-px items-center justify-center">
-			<SelectPrimitive.ItemIndicator>
-				<IconCheck color={colors.primary[500]} width={16} strokeWidth={2} />
-			</SelectPrimitive.ItemIndicator>
-		</View>
-		<SelectPrimitive.ItemText className="text-sm text-gray-500" />
-	</SelectPrimitive.Item>
-));
+>(({ className, children, ...props }, ref) => {
+	const { value } = SelectPrimitive.useRootContext();
+
+	const selected = props.value === value?.value;
+
+	return (
+		<SelectPrimitive.Item
+			ref={ref}
+			className={cn(
+				"relative flex-row w-full items-center justify-between py-2 px-8",
+				selected && "bg-primary-500",
+				props.disabled && "opacity-50",
+				className,
+			)}
+			{...props}
+		>
+			<View className="absolute left-2 flex size-3.5 pt-px items-center justify-center">
+				<SelectPrimitive.ItemIndicator>
+					<IconCheck color={colors.white} width={14} strokeWidth={3} />
+				</SelectPrimitive.ItemIndicator>
+			</View>
+			<SelectPrimitive.ItemText
+				className={cn("text-sm", selected ? "text-white" : "text-gray-500")}
+			/>
+		</SelectPrimitive.Item>
+	);
+});
+
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
 const SelectSeparator = forwardRef<

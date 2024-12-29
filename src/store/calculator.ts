@@ -1,4 +1,7 @@
-import type { CalculateRetirementResponse } from "@/contracts";
+import type {
+	CalculateEmergencyReserveResponse,
+	CalculateRetirementResponse,
+} from "@/contracts";
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
 
@@ -7,7 +10,12 @@ interface Retirement {
 	data: CalculateRetirementResponse;
 }
 
-export type CalculatorState = Retirement;
+interface EmergencyReserve {
+	type: "EMERGENCY_RESERVE";
+	data: CalculateEmergencyReserveResponse;
+}
+
+export type CalculatorState = Retirement | EmergencyReserve;
 
 const initialState = {} as CalculatorState;
 

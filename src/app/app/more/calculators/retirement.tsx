@@ -111,7 +111,10 @@ export default function Retirement() {
 					className="flex-1"
 				>
 					<View className="flex-1 justify-center p-7">
-						<ScrollView className="flex-1 bg-white rounded-xl p-5">
+						<ScrollView
+							className="flex-1 bg-white rounded-xl"
+							contentContainerClassName="p-5"
+						>
 							<Form {...form}>
 								<FormField
 									name="monthly_income"
@@ -291,7 +294,7 @@ export default function Retirement() {
 									name="life_expectancy"
 									control={form.control}
 									render={({ field }) => (
-										<FormItem className="mb-5">
+										<FormItem>
 											<FormLabel>Informe a expectativa de vida</FormLabel>
 											<FormControl>
 												<Input

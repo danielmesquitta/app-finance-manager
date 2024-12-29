@@ -23,6 +23,19 @@ export interface CalculateRetirementResponse {
 	achieved_goal_patrimony: boolean;
 }
 
+interface CalculateEmergencyReserveParams {
+	job_type: "EMPLOYEE" | "ENTREPRENEUR" | "CIVIL_SERVANT";
+	monthly_income: number;
+	monthly_expenses: number;
+	monthly_savings_percentage: number;
+}
+
+export interface CalculateEmergencyReserveResponse {
+	recommendedReserveInValue: number;
+	recommendedReserveInMonths: number;
+	monthsToAchieveEmergencyReserve: number;
+}
+
 export function calculateRetirement(payload: CalculateRetirementParams) {
 	return api.post<
 		CalculateRetirementParams,
@@ -30,5 +43,16 @@ export function calculateRetirement(payload: CalculateRetirementParams) {
 	>("/v1/calculator/retirement", {
 		...payload,
 		interest_type: "ANNUAL",
+	});
+}
+
+export function calculateEmergencyReserve(
+	payload: CalculateEmergencyReserveParams,
+) {
+	return api.post<
+		CalculateEmergencyReserveParams,
+		AxiosResponse<CalculateEmergencyReserveResponse>
+	>("/v1/calculator/emergency-reserve", {
+		...payload,
 	});
 }
