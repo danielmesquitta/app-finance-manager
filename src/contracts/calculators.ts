@@ -31,9 +31,9 @@ interface CalculateEmergencyReserveParams {
 }
 
 export interface CalculateEmergencyReserveResponse {
-	recommendedReserveInValue: number;
-	recommendedReserveInMonths: number;
-	monthsToAchieveEmergencyReserve: number;
+	recommended_reserve_in_value: number;
+	recommended_reserve_in_months: number;
+	months_to_achieve_emergency_reserve: number;
 }
 
 export function calculateRetirement(payload: CalculateRetirementParams) {

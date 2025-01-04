@@ -12,7 +12,11 @@ interface Retirement {
 
 interface EmergencyReserve {
 	type: "EMERGENCY_RESERVE";
-	data: CalculateEmergencyReserveResponse;
+	data: CalculateEmergencyReserveResponse & {
+		monthly_income: number;
+		monthly_expenses: number;
+		monthly_savings_percentage: number;
+	};
 }
 
 export type CalculatorState = Retirement | EmergencyReserve;

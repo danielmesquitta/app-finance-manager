@@ -64,12 +64,18 @@ export default function Retirement() {
 		},
 	});
 
-	async function onSubmit(data: FormSchema) {
+	async function onSubmit(payload: FormSchema) {
 		setIsLoading(true);
 
-		await calculateEmergencyReserve(data)
+		await calculateEmergencyReserve(payload)
 			.then(({ data }) => {
-				setCalculator({ type: "EMERGENCY_RESERVE", data });
+				setCalculator({
+					type: "EMERGENCY_RESERVE",
+					data: {
+						...data,
+						...payload,
+					},
+				});
 
 				push("/app/more/calculators/feedback");
 			})

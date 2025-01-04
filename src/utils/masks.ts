@@ -34,11 +34,13 @@ export function phone(text: string) {
 		.replace(/(-\d{4})\d+?$/, "$1");
 }
 
-export function currency(value: number) {
+export function currency(value: number, defaultType?: "CENT" | "REAL") {
+	const type = defaultType ?? "CENT";
+
 	return new Intl.NumberFormat("pt-BR", {
 		style: "currency",
 		currency: "BRL",
-	}).format(value);
+	}).format(type === "CENT" ? value / 100 : value);
 }
 
 export function money(text: string) {
@@ -52,7 +54,7 @@ export function money(text: string) {
 
 	const formattedNumber = `${digits.slice(0, -2)}.${digits.slice(-2)}`;
 
-	return currency(Number(formattedNumber));
+	return currency(Number(formattedNumber), "REAL");
 }
 
 export const masks = {

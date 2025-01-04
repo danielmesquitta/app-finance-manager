@@ -13,6 +13,7 @@ export function Slider({
 		<View>
 			<ExpoSlider
 				step={1}
+				value={value}
 				minimumValue={minimumValue}
 				maximumValue={maximumValue}
 				minimumTrackTintColor={colors.black}

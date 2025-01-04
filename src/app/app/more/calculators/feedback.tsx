@@ -13,7 +13,7 @@ import { useCalculatorStore } from "@/store";
 import { colors } from "@/styles";
 import { cn, masks } from "@/utils";
 import { useRouter } from "expo-router";
-import type { FC } from "react";
+import { useMemo, type FC } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import type { SvgProps } from "react-native-svg";
@@ -74,7 +74,7 @@ function FeedbackItem({
 function FeedbackHeader() {
 	const user = getUser();
 
-	const { type } = useCalculatorStore();
+	const { type, data } = useCalculatorStore();
 
 	if (!user) return null;
 
@@ -88,6 +88,18 @@ function FeedbackHeader() {
 					Você atingiu sua meta de aposentadoria com os investimentos atuais.
 				</Text>
 			)}
+
+			{type === "EMERGENCY_RESERVE" && (
+				<>
+					<Text className="text-center text-xs text-gray-400">
+						Reserva financeira
+					</Text>
+
+					<Text className="text-xl mt-1 text-center font-jakarta-600 text-black">
+						{masks.currency(data.recommended_reserve_in_value)}
+					</Text>
+				</>
+			)}
 		</View>
 	);
 }
@@ -95,7 +107,73 @@ function FeedbackHeader() {
 export default function Feedback() {
 	const { push, back } = useRouter();
 
-	const { data } = useCalculatorStore();
+	const { type, data } = useCalculatorStore();
+
+	console.log({ data });
+
+	const resultFields = useMemo(() => {
+		if (type === "RETIREMENT") {
+			return {
+				title: "Resultados",
+				fields: [
+					{
+						icon: IconOld,
+						value: masks.currency(data.max_monthly_expenses),
+						title: "Você poderá gastar por mês:",
+					},
+					{
+						icon: IconFriends,
+						type: data.heritage > 0 ? "GRAY" : "RED",
+						value:
+							data.heritage > 0
+								? masks.currency(data.heritage)
+								: "Não haverá herança",
+						title: "Deixará de herança:",
+					},
+					{
+						icon: IconTargetArrow,
+						value: masks.currency(
+							data.exceeded_goal_amount > 0 ? data.exceeded_goal_amount : 0,
+						),
+						title: "Você ultrapassou da sua meta:",
+					},
+				] satisfies FeedbackItemProps[],
+			};
+		}
+
+		if (type === "EMERGENCY_RESERVE") {
+			return {
+				title: "Para isso, você precisará seguir o plano abaixo:",
+				fields: [
+					{
+						icon: IconWallet,
+						value: masks.currency(data.monthly_income),
+						title: "Salário:",
+					},
+					{
+						icon: IconWallet,
+						value: masks.currency(data.monthly_expenses),
+						title: "Custo fixo:",
+					},
+					{
+						icon: IconWallet,
+						value: `${data.monthly_savings_percentage}%`,
+						title: "Poupança mensal:",
+					},
+					{
+						icon: IconWallet,
+						value: `${data.recommended_reserve_in_months} meses`,
+						title: "Período de reserva recomendado:",
+					},
+				] satisfies FeedbackItemProps[],
+			};
+		}
+
+		return {
+			title: null,
+			fields: [],
+		};
+	}, [data, type]);
 
 	return (
 		<View className="flex-1">
@@ -105,48 +183,33 @@ export default function Feedback() {
 				<View className="flex-1 px-7 pb-7 pt-64 gap-7">
 					<FeedbackHeader />
 
-					<View className="bg-white p-4 rounded-xl">
-						<FeedbackItem
-							icon={IconWallet}
-							type="GREEN"
-							title="Você se aposentará com:"
-							value={masks.currency(data.property_on_retirement)}
-						/>
-					</View>
+					{type === "RETIREMENT" && (
+						<View className="bg-white p-4 rounded-xl">
+							<FeedbackItem
+								icon={IconWallet}
+								type="GREEN"
+								title="Você se aposentará com:"
+								value={masks.currency(data.property_on_retirement)}
+							/>
+						</View>
+					)}
 
 					<View className="bg-white p-4 rounded-xl">
-						<Text className="text-xs text-gray-400 font-jakarta-500 mb-5">
-							Resultados
-						</Text>
+						{resultFields.title && (
+							<Text className="text-xs text-gray-400 font-jakarta-500 mb-5">
+								{resultFields.title}
+							</Text>
+						)}
 
-						<FeedbackItem
-							icon={IconOld}
-							title="Você poderá gastar por mês:"
-							value={masks.currency(data.max_monthly_expenses)}
-						/>
+						{resultFields.fields.map((field, index) => (
+							<View key={field.title}>
+								{index !== 0 && (
+									<View className="h-px bg-gray-50 w-full my-5" />
+								)}
 
-						<View className="h-px bg-gray-50 w-full my-5" />
-
-						<FeedbackItem
-							icon={IconFriends}
-							type={data.heritage > 0 ? "GRAY" : "RED"}
-							title="Deixará de herança:"
-							value={
-								data.heritage > 0
-									? masks.currency(data.heritage)
-									: "Não haverá herança"
-							}
-						/>
-
-						<View className="h-px bg-gray-50 w-full my-5" />
-
-						<FeedbackItem
-							icon={IconTargetArrow}
-							title="Você ultrapassou da sua meta:"
-							value={masks.currency(
-								data.exceeded_goal_amount > 0 ? data.exceeded_goal_amount : 0,
-							)}
-						/>
+								<FeedbackItem {...field} />
+							</View>
+						))}
 					</View>
 				</View>
 			</ScrollView>
