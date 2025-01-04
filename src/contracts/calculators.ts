@@ -1,4 +1,5 @@
 import { api } from "@/services";
+import { masks } from "@/utils";
 import type { AxiosResponse } from "axios";
 
 interface CalculateRetirementParams {
@@ -23,7 +24,42 @@ export interface CalculateRetirementResponse {
 	achieved_goal_patrimony: boolean;
 }
 
-interface CalculateEmergencyReserveParams {
+interface CalculateSimpleInterestParams {
+	interest: number;
+	interest_type: "ANNUAL" | "MONTHLY";
+	initial_deposit: number;
+	period_in_months: number;
+}
+
+interface CalculateInterestByMonth {
+	total_amount: number;
+	total_deposit: number;
+	total_interest: number;
+}
+
+export interface CalculateSimpleInterestResponse {
+	by_month: Record<string, CalculateInterestByMonth>;
+	total_amount: number;
+	total_deposit: number;
+	total_interest: number;
+}
+
+interface CalculateCompoundInterestParams {
+	interest: number;
+	interest_type: "ANNUAL" | "MONTHLY";
+	initial_deposit: number;
+	monthly_deposit: number;
+	period_in_months: number;
+}
+
+export interface CalculateCompoundInterestResponse {
+	by_month: Record<string, CalculateInterestByMonth>;
+	total_amount: number;
+	total_deposit: number;
+	total_interest: number;
+}
+
+export interface CalculateEmergencyReserveParams {
 	job_type: "EMPLOYEE" | "ENTREPRENEUR" | "CIVIL_SERVANT";
 	monthly_income: number;
 	monthly_expenses: number;
@@ -42,17 +78,55 @@ export function calculateRetirement(payload: CalculateRetirementParams) {
 		AxiosResponse<CalculateRetirementResponse>
 	>("/v1/calculator/retirement", {
 		...payload,
+		interest: masks.percentage.parse(payload.interest),
 		interest_type: "ANNUAL",
+		income_investment_percentage: masks.percentage.parse(
+			payload.income_investment_percentage,
+		),
 	});
 }
 
 export function calculateEmergencyReserve(
 	payload: CalculateEmergencyReserveParams,
 ) {
+	console.log({
+		...payload,
+		monthly_savings_percentage: masks.percentage.parse(
+			payload.monthly_savings_percentage,
+		),
+	});
+
 	return api.post<
 		CalculateEmergencyReserveParams,
 		AxiosResponse<CalculateEmergencyReserveResponse>
 	>("/v1/calculator/emergency-reserve", {
 		...payload,
+		monthly_savings_percentage: masks.percentage.parse(
+			payload.monthly_savings_percentage,
+		),
+	});
+}
+
+export function calculateSimpleInterest(
+	payload: CalculateSimpleInterestParams,
+) {
+	return api.post<
+		CalculateSimpleInterestParams,
+		AxiosResponse<CalculateSimpleInterestResponse>
+	>("/v1/calculator/simple-interest", {
+		...payload,
+		interest: masks.percentage.parse(payload.interest),
+	});
+}
+
+export function calculateCompoundInterest(
+	payload: CalculateCompoundInterestParams,
+) {
+	return api.post<
+		CalculateCompoundInterestParams,
+		AxiosResponse<CalculateCompoundInterestResponse>
+	>("/v1/calculator/compound-interest", {
+		...payload,
+		interest: masks.percentage.parse(payload.interest),
 	});
 }

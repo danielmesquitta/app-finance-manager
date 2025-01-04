@@ -60,7 +60,6 @@ const schema = z.object({
 		.default("0"),
 	income_investment_percentage: z
 		.string({ message: "Digite a porcentagem de investimento" })
-		.min(1, { message: "Digite a porcentagem de investimento" })
 		.transform((value) => Number.parseFloat(value.replace(",", ".")))
 		.refine((value) => value > 0 && value < 100, {
 			message: "O valor deve ser maior que 0 e menor que 100",
@@ -82,7 +81,6 @@ export default function Retirement() {
 			interest: 4,
 			retirement_age: 62,
 			life_expectancy: 76,
-			income_investment_percentage: 20,
 		},
 	});
 

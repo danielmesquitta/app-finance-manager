@@ -1,6 +1,9 @@
 import type {
+	CalculateCompoundInterestResponse,
+	CalculateEmergencyReserveParams,
 	CalculateEmergencyReserveResponse,
 	CalculateRetirementResponse,
+	CalculateSimpleInterestResponse,
 } from "@/contracts";
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
@@ -10,16 +13,27 @@ interface Retirement {
 	data: CalculateRetirementResponse;
 }
 
-interface EmergencyReserve {
-	type: "EMERGENCY_RESERVE";
-	data: CalculateEmergencyReserveResponse & {
-		monthly_income: number;
-		monthly_expenses: number;
-		monthly_savings_percentage: number;
-	};
+interface SimpleInterest {
+	type: "SIMPLE_INTEREST";
+	data: CalculateSimpleInterestResponse;
 }
 
-export type CalculatorState = Retirement | EmergencyReserve;
+interface CompoundInterest {
+	type: "COMPOUND_INTEREST";
+	data: CalculateCompoundInterestResponse;
+}
+
+interface EmergencyReserve {
+	type: "EMERGENCY_RESERVE";
+	data: CalculateEmergencyReserveResponse &
+		Omit<CalculateEmergencyReserveParams, "job_type">;
+}
+
+export type CalculatorState =
+	| Retirement
+	| SimpleInterest
+	| CompoundInterest
+	| EmergencyReserve;
 
 const initialState = {} as CalculatorState;
 

@@ -1,6 +1,9 @@
 import {
 	CalculatorFeedbackBackground,
 	IconArrowNarrowRight,
+	IconCalendarDue,
+	IconCoins,
+	IconCreditCard,
 	IconFriends,
 	IconHelpCircle,
 	IconOld,
@@ -89,6 +92,18 @@ function FeedbackHeader() {
 				</Text>
 			)}
 
+			{(type === "SIMPLE_INTEREST" || type === "COMPOUND_INTEREST") && (
+				<>
+					<Text className="text-center text-xs text-gray-400">
+						Valor total final
+					</Text>
+
+					<Text className="text-xl mt-1 text-center font-jakarta-600 text-black">
+						{masks.currency(data.total_amount)}
+					</Text>
+				</>
+			)}
+
 			{type === "EMERGENCY_RESERVE" && (
 				<>
 					<Text className="text-center text-xs text-gray-400">
@@ -108,8 +123,6 @@ export default function Feedback() {
 	const { push, back } = useRouter();
 
 	const { type, data } = useCalculatorStore();
-
-	console.log({ data });
 
 	const resultFields = useMemo(() => {
 		if (type === "RETIREMENT") {
@@ -141,6 +154,27 @@ export default function Feedback() {
 			};
 		}
 
+		if (type === "SIMPLE_INTEREST" || type === "COMPOUND_INTEREST") {
+			return {
+				title: "Valores:",
+				fields: [
+					{
+						icon: IconWallet,
+						value: masks.currency(data.total_deposit),
+						title:
+							type === "SIMPLE_INTEREST"
+								? "Valor inicial:"
+								: "Valor total investido:",
+					},
+					{
+						icon: IconCreditCard,
+						value: masks.currency(data.total_interest),
+						title: "Total em juros:",
+					},
+				] satisfies FeedbackItemProps[],
+			};
+		}
+
 		if (type === "EMERGENCY_RESERVE") {
 			return {
 				title: "Para isso, você precisará seguir o plano abaixo:",
@@ -151,17 +185,17 @@ export default function Feedback() {
 						title: "Salário:",
 					},
 					{
-						icon: IconWallet,
+						icon: IconCreditCard,
 						value: masks.currency(data.monthly_expenses),
 						title: "Custo fixo:",
 					},
 					{
-						icon: IconWallet,
+						icon: IconCoins,
 						value: `${data.monthly_savings_percentage}%`,
 						title: "Poupança mensal:",
 					},
 					{
-						icon: IconWallet,
+						icon: IconCalendarDue,
 						value: `${data.recommended_reserve_in_months} meses`,
 						title: "Período de reserva recomendado:",
 					},

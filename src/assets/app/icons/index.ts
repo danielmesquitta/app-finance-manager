@@ -26,11 +26,15 @@ export { default as IconPigMoney } from "./icon-pig-money.svg";
 
 export { default as IconSmartHome } from "./icon-smart-home.svg";
 
+export { default as IconCreditCard } from "./icon-credit-card.svg";
+
 export { default as IconCalculator } from "./icon-calculator.svg";
 
 export { default as IconUserSquare } from "./icon-user-square.svg";
 
 export { default as IconHelpCircle } from "./icon-help-circle.svg";
+
+export { default as IconCalendarDue } from "./icon-calendar-due.svg";
 
 export { default as IconCoinsActive } from "./icon-coins-active.svg";
 

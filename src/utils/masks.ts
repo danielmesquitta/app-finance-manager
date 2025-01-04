@@ -57,6 +57,18 @@ export function money(text: string) {
 	return currency(Number(formattedNumber), "REAL");
 }
 
+export const percentage = {
+	parse(value: string | number) {
+		const data = Number(value);
+
+		return data * 100;
+	},
+
+	format(value: number, parse = false) {
+		return `${parse ? value / 100 : value}%`;
+	},
+};
+
 export const masks = {
 	cep,
 	cpf,
@@ -65,4 +77,5 @@ export const masks = {
 	clear,
 	money,
 	currency,
+	percentage,
 };
