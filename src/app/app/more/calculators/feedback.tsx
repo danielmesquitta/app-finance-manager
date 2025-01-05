@@ -25,12 +25,14 @@ interface FeedbackItemProps {
 	icon: FC<SvgProps>;
 	type?: "RED" | "GRAY" | "GREEN";
 	title: string;
+	help?: string;
 	value: string;
 }
 
 function FeedbackItem({
 	icon: Icon,
 	type = "GRAY",
+	help,
 	title,
 	value,
 }: FeedbackItemProps) {
@@ -65,7 +67,7 @@ function FeedbackItem({
 				</Text>
 			</View>
 
-			{type !== "GREEN" && (
+			{help && (
 				<TouchableOpacity className="p-1.5 rounded-lg border border-solid border-gray-100 ml-auto">
 					<IconHelpCircle width={16} color={colors.gray[500]} />
 				</TouchableOpacity>
