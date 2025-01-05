@@ -89,13 +89,6 @@ export function calculateRetirement(payload: CalculateRetirementParams) {
 export function calculateEmergencyReserve(
 	payload: CalculateEmergencyReserveParams,
 ) {
-	console.log({
-		...payload,
-		monthly_savings_percentage: masks.percentage.parse(
-			payload.monthly_savings_percentage,
-		),
-	});
-
 	return api.post<
 		CalculateEmergencyReserveParams,
 		AxiosResponse<CalculateEmergencyReserveResponse>

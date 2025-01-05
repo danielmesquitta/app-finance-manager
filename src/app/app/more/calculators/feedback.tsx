@@ -10,7 +10,7 @@ import {
 	IconTargetArrow,
 	IconWallet,
 } from "@/assets/app";
-import { Text, Button } from "@/components";
+import { Text, Button, LineChart } from "@/components";
 import { getUser } from "@/services";
 import { useCalculatorStore } from "@/store";
 import { colors } from "@/styles";
@@ -209,6 +209,29 @@ export default function Feedback() {
 		};
 	}, [data, type]);
 
+	const lineChartData = useMemo(() => {
+		if (type === "SIMPLE_INTEREST" || type === "COMPOUND_INTEREST") {
+			const params = {
+				x: Object.keys(data.by_month).map((month) => Number(month)),
+				y: Object.values(data.by_month).map(
+					({ total_deposit }) => total_deposit,
+				),
+			};
+
+			if (type === "SIMPLE_INTEREST") return params;
+
+			return {
+				...params,
+				y2: Object.values(data.by_month).map(
+					({ total_amount }) => total_amount,
+				),
+				subtitles: { y: "Valor investido", y2: "Rentabilidade" },
+			};
+		}
+
+		return null;
+	}, [type, data]);
+
 	return (
 		<View className="flex-1">
 			<ScrollView className="flex-1">
@@ -245,6 +268,16 @@ export default function Feedback() {
 							</View>
 						))}
 					</View>
+
+					{(type === "SIMPLE_INTEREST" || type === "COMPOUND_INTEREST") && (
+						<View className="bg-white p-4 rounded-xl">
+							<Text className="text-xs text-gray-400 font-jakarta-500 mb-5">
+								Gráfico:
+							</Text>
+
+							{lineChartData && <LineChart {...lineChartData} height={232} />}
+						</View>
+					)}
 				</View>
 			</ScrollView>
 
