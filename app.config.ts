@@ -50,6 +50,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			{
 				android: {
 					parentTheme: "Material3",
+					enforceNavigationBarContrast: false,
 				},
 			},
 		],

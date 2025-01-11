@@ -7,9 +7,13 @@ import { useSafeArea } from "@/hooks";
 
 interface HeadNavigationProps {
 	title: string;
+	showBackButton?: boolean;
 }
 
-export function HeadNavigation({ title }: HeadNavigationProps) {
+export function HeadNavigation({
+	title,
+	showBackButton = true,
+}: HeadNavigationProps) {
 	const { back } = useRouter();
 
 	const { top } = useSafeArea();
@@ -19,13 +23,18 @@ export function HeadNavigation({ title }: HeadNavigationProps) {
 			style={{ paddingTop: top + 16 }}
 			className="flex-row items-center justify-between bg-white pb-5 px-7"
 		>
-			<TouchableOpacity onPress={back} className="p-1.5 bg-gray-50 rounded-xl">
-				<IconChevronRight
-					width={20}
-					color={colors.gray[400]}
-					style={{ transform: [{ rotate: "180deg" }] }}
-				/>
-			</TouchableOpacity>
+			{showBackButton && (
+				<TouchableOpacity
+					onPress={back}
+					className="p-1.5 bg-gray-50 rounded-xl"
+				>
+					<IconChevronRight
+						width={20}
+						color={colors.gray[400]}
+						style={{ transform: [{ rotate: "180deg" }] }}
+					/>
+				</TouchableOpacity>
+			)}
 
 			<Text className="font-jakarta-600">{title}</Text>
 

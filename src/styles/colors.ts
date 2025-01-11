@@ -10,12 +10,25 @@ export const colors = {
 		500: "#7C7C7C",
 	},
 
+	cyan: {
+		500: "#56BADA",
+	},
+
+	pink: {
+		500: "#DA56C8",
+	},
+
 	green: {
+		300: "#61DA56",
 		500: "#16AC6F",
 	},
 
 	white: "#FFF",
 	black: "#000",
+
+	purple: {
+		500: "#6347EB",
+	},
 
 	primary: {
 		400: "#FC6C45",

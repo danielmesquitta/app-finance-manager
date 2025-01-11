@@ -2,6 +2,8 @@ export { default as IconX } from "./icon-x.svg";
 
 export { default as IconOld } from "./icon-old.svg";
 
+export { default as IconBook } from "./icon-book.svg";
+
 export { default as IconBell } from "./icon-bell.svg";
 
 export { default as IconCheck } from "./icon-check.svg";
@@ -26,13 +28,17 @@ export { default as IconPigMoney } from "./icon-pig-money.svg";
 
 export { default as IconSmartHome } from "./icon-smart-home.svg";
 
-export { default as IconCreditCard } from "./icon-credit-card.svg";
-
 export { default as IconCalculator } from "./icon-calculator.svg";
 
 export { default as IconUserSquare } from "./icon-user-square.svg";
 
 export { default as IconHelpCircle } from "./icon-help-circle.svg";
+
+export { default as IconTrendingUp } from "./icon-trending-up.svg";
+
+export { default as IconCreditCard } from "./icon-credit-card.svg";
+
+export { default as IconCircleCheck } from "./icon-circle-check.svg";
 
 export { default as IconCalendarDue } from "./icon-calendar-due.svg";
 
@@ -47,6 +53,10 @@ export { default as IconMathSymbols } from "./icon-math-symbols.svg";
 export { default as IconChevronDown } from "./icon-chevron-down.svg";
 
 export { default as IconChevronRight } from "./icon-chevron-right.svg";
+
+export { default as IconMedicineSyrup } from "./icon-medicine-syrup.svg";
+
+export { default as IconToolsKitchen2 } from "./icon-tools-kitchen-2.svg";
 
 export { default as IconCreditCardPay } from "./icon-credit-card-pay.svg";
 
