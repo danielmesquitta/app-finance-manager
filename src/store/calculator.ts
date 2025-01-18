@@ -1,4 +1,5 @@
 import type {
+	CalculateCashVsInstallmentsResponse,
 	CalculateCompoundInterestResponse,
 	CalculateEmergencyReserveParams,
 	CalculateEmergencyReserveResponse,
@@ -29,11 +30,17 @@ interface EmergencyReserve {
 		Omit<CalculateEmergencyReserveParams, "job_type">;
 }
 
+interface CashVsInstallments {
+	type: "CASH_VS_INSTALLMENTS";
+	data: CalculateCashVsInstallmentsResponse;
+}
+
 export type CalculatorState =
 	| Retirement
 	| SimpleInterest
 	| CompoundInterest
-	| EmergencyReserve;
+	| EmergencyReserve
+	| CashVsInstallments;
 
 const initialState = {} as CalculatorState;
 

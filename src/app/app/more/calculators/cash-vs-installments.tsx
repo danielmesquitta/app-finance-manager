@@ -10,6 +10,7 @@ import {
 	FormMessage,
 	HeadNavigation,
 	Input,
+	Label,
 	Select,
 	SelectContent,
 	SelectItem,
@@ -27,7 +28,7 @@ import { colors } from "@/styles";
 import { masks } from "@/utils";
 import { useState } from "react";
 import { useCalculatorStore } from "@/store";
-import { calculateSimpleInterest } from "@/contracts";
+import { calculateCashVsInstallments } from "@/contracts";
 import { toast } from "@backpackapp-io/react-native-toast";
 
 const interestTypeOptions = [
@@ -36,24 +37,46 @@ const interestTypeOptions = [
 ];
 
 const schema = z.object({
+	cashback: z.coerce
+		.number({ message: "Digite o valor do cashback" })
+		.min(0, { message: "O valor do cashback deve ser maior que 0" })
+		.optional(),
 	interest: z.coerce
 		.number({ message: "Digite a taxa de juros" })
 		.min(0, { message: "A taxa de juros deve ser maior que 0" })
 		.max(1000, { message: "A taxa de juros deve ser menor que 100" }),
+	installments: z.coerce
+		.number({ message: "Digite o número de parcelas" })
+		.min(1, { message: "O número de parcelas deve ser maior que 0" }),
+	cash_discount: z.coerce
+		.number({ message: "Digite a porcentagem do desconto" })
+		.min(0, {
+			message: "A porcentagem do desconto deve ser maior que 0",
+		})
+		.max(1000, {
+			message: "A porcentagem do desconto deve ser menor que 100",
+		})
+		.optional(),
 	interest_type: z.enum(["ANNUAL", "MONTHLY"], {
 		message: "Selecione o tipo de juros",
 	}),
-	initial_deposit: z
-		.string({ message: "Digite o valor inicial" })
+	purchase_value: z
+		.string({ message: "Digite o valor da compra" })
 		.transform((value) => (value ? Number(masks.clear(value)) : 0)),
-	period_in_months: z.coerce
-		.number({ message: "Digite o período em meses" })
-		.min(1, { message: "O período deve ser maior que 0" }),
+	credit_card_interest: z.coerce
+		.number({ message: "Digite a taxa de juros do cartão de crédito" })
+		.min(0, {
+			message: "A taxa de juros do cartão de crédito deve ser maior que 0",
+		})
+		.max(1000, {
+			message: "A taxa de juros do cartão de crédito deve ser menor que 100",
+		})
+		.optional(),
 });
 
 type FormSchema = z.infer<typeof schema>;
 
-export default function SimpleInterest() {
+export default function CashVsInstallments() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { push } = useRouter();
@@ -64,18 +87,17 @@ export default function SimpleInterest() {
 		resolver: zodResolver(schema),
 		defaultValues: {
 			interest: 12,
-			interest_type: "ANNUAL",
-			period_in_months: 12,
+			interest_type: "MONTHLY",
 		},
 	});
 
 	async function onSubmit(payload: FormSchema) {
 		setIsLoading(true);
 
-		await calculateSimpleInterest(payload)
+		await calculateCashVsInstallments(payload)
 			.then(({ data }) => {
 				setCalculator({
-					type: "SIMPLE_INTEREST",
+					type: "CASH_VS_INSTALLMENTS",
 					data,
 				});
 
@@ -98,7 +120,7 @@ export default function SimpleInterest() {
 	return (
 		<DismissKeyboard>
 			<View className="flex-1">
-				<HeadNavigation title="Juros simples" />
+				<HeadNavigation title="À vista ou parcelado" />
 
 				<KeyboardAvoidingView
 					behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -111,11 +133,11 @@ export default function SimpleInterest() {
 						>
 							<Form {...form}>
 								<FormField
-									name="initial_deposit"
+									name="purchase_value"
 									control={form.control}
 									render={({ field }) => (
 										<FormItem className="mb-5">
-											<FormLabel>Valor inicial</FormLabel>
+											<FormLabel>Valor da compra</FormLabel>
 											<FormControl>
 												<Input
 													mask="CURRENCY"
@@ -131,13 +153,110 @@ export default function SimpleInterest() {
 									)}
 								/>
 
+								<FormField
+									name="cash_discount"
+									control={form.control}
+									render={({ field }) => (
+										<FormItem className="mb-5">
+											<FormLabel>Desconto à vista (%)</FormLabel>
+											<FormControl>
+												<Input
+													inputMode="decimal"
+													placeholder="10"
+													keyboardType="decimal-pad"
+													onChangeText={field.onChange}
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<View className="flex-col mb-5 gap-1">
+									<Label>Rentabilidade anual nos investimentos</Label>
+
+									<View className="flex-row items-end gap-5">
+										<FormField
+											name="interest"
+											control={form.control}
+											render={({ field }) => (
+												<FormItem className="flex-1">
+													<FormControl>
+														<Input
+															inputMode="decimal"
+															placeholder="12"
+															keyboardType="decimal-pad"
+															onChangeText={field.onChange}
+															{...field}
+														/>
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											name="interest_type"
+											control={form.control}
+											render={({ field }) => (
+												<FormItem className="flex-1">
+													<Select
+														defaultValue={interestType}
+														onValueChange={(option) =>
+															field.onChange(option?.value)
+														}
+													>
+														<FormControl>
+															<SelectTrigger>
+																<SelectValue placeholder="Selecione o intervalo" />
+															</SelectTrigger>
+														</FormControl>
+
+														<SelectContent>
+															{interestTypeOptions.map(({ value, label }) => (
+																<SelectItem
+																	key={value}
+																	value={value}
+																	label={label}
+																/>
+															))}
+														</SelectContent>
+													</Select>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+									</View>
+								</View>
+
 								<View className="flex-row items-end gap-5 mb-5">
 									<FormField
-										name="interest"
+										name="installments"
 										control={form.control}
 										render={({ field }) => (
 											<FormItem className="flex-1">
-												<FormLabel>Taxa de juros</FormLabel>
+												<FormLabel>Número de parcelas</FormLabel>
+												<FormControl>
+													<Input
+														inputMode="numeric"
+														placeholder="12"
+														keyboardType="numeric"
+														onChangeText={field.onChange}
+														{...field}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+
+									<FormField
+										name="credit_card_interest"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem className="flex-1">
+												<FormLabel>Juros no parcelamento (%)</FormLabel>
 												<FormControl>
 													<Input
 														inputMode="decimal"
@@ -151,51 +270,19 @@ export default function SimpleInterest() {
 											</FormItem>
 										)}
 									/>
-
-									<FormField
-										name="interest_type"
-										control={form.control}
-										render={({ field }) => (
-											<FormItem className="flex-1">
-												<Select
-													defaultValue={interestType}
-													onValueChange={(option) =>
-														field.onChange(option?.value)
-													}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Selecione o intervalo" />
-														</SelectTrigger>
-													</FormControl>
-
-													<SelectContent>
-														{interestTypeOptions.map(({ value, label }) => (
-															<SelectItem
-																key={value}
-																value={value}
-																label={label}
-															/>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
 								</View>
 
 								<FormField
-									name="period_in_months"
+									name="cashback"
 									control={form.control}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Período em meses</FormLabel>
+											<FormLabel>Cashback no cartão de crédito (%)</FormLabel>
 											<FormControl>
 												<Input
-													inputMode="numeric"
+													inputMode="decimal"
 													placeholder="12"
-													keyboardType="numeric"
+													keyboardType="decimal-pad"
 													onChangeText={field.onChange}
 													{...field}
 												/>

@@ -109,10 +109,10 @@ export function LineChart({
 					{line2Path && (
 						<Path
 							d={line2Path}
+							fill="none"
 							stroke={colors.black}
 							strokeWidth={2}
 							strokeDasharray={[6, 4]}
-							fill="none"
 						/>
 					)}
 
@@ -137,7 +137,7 @@ export function LineChart({
 								textAnchor="start"
 								alignmentBaseline="middle"
 							>
-								{formatNumber(val)}
+								{formatNumber(val / 100)}
 							</Text>
 						);
 					})}

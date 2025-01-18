@@ -117,6 +117,20 @@ function FeedbackHeader() {
 					</Text>
 				</>
 			)}
+
+			{type === "CASH_VS_INSTALLMENTS" && (
+				<>
+					<Text className="text-center text-xs text-gray-400">
+						O pagamento é melhor feito:
+					</Text>
+
+					<Text className="text-xl mt-1 text-center font-jakarta-600 text-black capitalize">
+						{data.savings_with_credit_card > data.savings_with_cash
+							? "A prazo"
+							: "À vista"}
+					</Text>
+				</>
+			)}
 		</View>
 	);
 }
@@ -205,6 +219,24 @@ export default function Feedback() {
 			};
 		}
 
+		if (type === "CASH_VS_INSTALLMENTS") {
+			return {
+				title: "Resultados",
+				fields: [
+					{
+						icon: IconWallet,
+						value: masks.currency(data.savings_with_cash),
+						title: "Pagando à vista, você terá o que comprou e mais:",
+					},
+					{
+						icon: IconCreditCard,
+						value: masks.currency(data.savings_with_credit_card),
+						title: "Pagando a prazo, você terá o que comprou e mais:",
+					},
+				],
+			};
+		}
+
 		return {
 			title: null,
 			fields: [],
@@ -212,6 +244,19 @@ export default function Feedback() {
 	}, [data, type]);
 
 	const lineChartData = useMemo(() => {
+		if (type === "CASH_VS_INSTALLMENTS") {
+			const params = {
+				x: Object.keys(data.cash_flow_by_month).map((month) => Number(month)),
+				y: Object.values(data.cash_flow_by_month).map(
+					({ credit_card }) => credit_card,
+				),
+				y2: Object.values(data.cash_flow_by_month).map(({ cash }) => cash),
+				subtitles: { y: "A prazo", y2: "À vista" },
+			};
+
+			return params;
+		}
+
 		if (type === "SIMPLE_INTEREST" || type === "COMPOUND_INTEREST") {
 			const params = {
 				x: Object.keys(data.by_month).map((month) => Number(month)),
@@ -271,10 +316,14 @@ export default function Feedback() {
 						))}
 					</View>
 
-					{(type === "SIMPLE_INTEREST" || type === "COMPOUND_INTEREST") && (
+					{(type === "SIMPLE_INTEREST" ||
+						type === "COMPOUND_INTEREST" ||
+						type === "CASH_VS_INSTALLMENTS") && (
 						<View className="bg-white p-4 rounded-xl">
 							<Text className="text-xs text-gray-400 font-jakarta-500 mb-5">
-								Gráfico:
+								{type === "CASH_VS_INSTALLMENTS"
+									? "Fluxo de caixa projetado:"
+									: "Gráfico:"}
 							</Text>
 
 							{lineChartData && <LineChart {...lineChartData} height={232} />}

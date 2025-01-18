@@ -3,6 +3,7 @@ import {
 	IconMathSymbols,
 	IconOld,
 	IconPigMoney,
+	IconShoppingCartDollar,
 	IconSquarePercentage,
 } from "@/assets/app";
 import { Text, HeadNavigation } from "@/components";
@@ -15,25 +16,31 @@ const data = [
 		icon: IconOld,
 		path: "retirement",
 		title: "Aposentadoria",
-		description: "Planeje seu final de vida com segurança.",
+		description: "Calcule o valor necessário para uma aposentadoria tranquila.",
 	},
 	{
 		icon: IconPigMoney,
 		path: "emergency-reserve",
 		title: "Reserva financeira",
-		description: "Planeje seu final de vida com segurança.",
+		description: "Calcule o valor necessário para uma reserva financeira.",
 	},
 	{
 		icon: IconSquarePercentage,
 		path: "simple-interest",
 		title: "Juros simples",
-		description: "Planeje seu final de vida com segurança.",
+		description: "Calcule o valor futuro de uma aplicação com juros simples.",
 	},
 	{
 		icon: IconMathSymbols,
 		path: "compound-interest",
 		title: "Juros compostos",
-		description: "Planeje seu final de vida com segurança.",
+		description: "Calcule o valor futuro de uma aplicação com juros compostos.",
+	},
+	{
+		icon: IconShoppingCartDollar,
+		path: "cash-vs-installments",
+		title: "À vista ou parcelado",
+		description: "Compare o valor total de uma compra à vista e parcelada.",
 	},
 ];
 

@@ -72,6 +72,27 @@ export interface CalculateEmergencyReserveResponse {
 	months_to_achieve_emergency_reserve: number;
 }
 
+interface CalculateCashVsInstallmentsParams {
+	interest: number;
+	cashback?: number;
+	installments: number;
+	interest_type: "ANNUAL" | "MONTHLY";
+	cash_discount?: number;
+	purchase_value: number;
+	credit_card_interest?: number;
+}
+
+interface CalculateCashFlowByMonth {
+	cash: number;
+	credit_card: number;
+}
+
+export interface CalculateCashVsInstallmentsResponse {
+	savings_with_cash: number;
+	cash_flow_by_month: Record<string, CalculateCashFlowByMonth>;
+	savings_with_credit_card: number;
+}
+
 export function calculateRetirement(payload: CalculateRetirementParams) {
 	return api.post<
 		CalculateRetirementParams,
@@ -121,5 +142,26 @@ export function calculateCompoundInterest(
 	>("/v1/calculator/compound-interest", {
 		...payload,
 		interest: masks.percentage.parse(payload.interest),
+	});
+}
+
+export function calculateCashVsInstallments(
+	payload: CalculateCashVsInstallmentsParams,
+) {
+	return api.post<
+		CalculateCashVsInstallmentsParams,
+		AxiosResponse<CalculateCashVsInstallmentsResponse>
+	>("/v1/calculator/cash-vs-installments", {
+		...payload,
+		interest: masks.percentage.parse(payload.interest),
+		cashback: payload.cashback
+			? masks.percentage.parse(payload.cashback)
+			: undefined,
+		cash_discount: payload.cash_discount
+			? masks.percentage.parse(payload.cash_discount)
+			: undefined,
+		credit_card_interest: payload.credit_card_interest
+			? masks.percentage.parse(payload.credit_card_interest)
+			: undefined,
 	});
 }

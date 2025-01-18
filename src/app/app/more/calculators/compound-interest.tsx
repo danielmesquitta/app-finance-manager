@@ -39,7 +39,7 @@ const schema = z.object({
 	interest: z.coerce
 		.number({ message: "Digite a taxa de juros" })
 		.min(0, { message: "A taxa de juros deve ser maior que 0" })
-		.max(1000, { message: "A taxa de juros deve ser menor que 1000" }),
+		.max(1000, { message: "A taxa de juros deve ser menor que 100" }),
 	interest_type: z.enum(["ANNUAL", "MONTHLY"], {
 		message: "Selecione o tipo de juros",
 	}),

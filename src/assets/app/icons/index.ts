@@ -76,6 +76,8 @@ export { default as IconSquarePercentage } from "./icon-square-percentage.svg";
 
 export { default as IconArrowNarrowRight } from "./icon-arrow-narrow-right.svg";
 
+export { default as IconShoppingCartDollar } from "./icon-shopping-cart-dollar.svg";
+
 export { default as IconCreditCardPayActive } from "./icon-credit-card-pay-active.svg";
 
 export { default as IconDotsCircleHorizontal } from "./icon-dots-circle-horizontal.svg";
