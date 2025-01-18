@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios";
 
 interface AuthParams {
 	token: string;
-	provider: "GOOGLE" | "APPLE";
+	provider: "GOOGLE" | "APPLE" | "MOCK";
 }
 
 export interface AuthResponse {

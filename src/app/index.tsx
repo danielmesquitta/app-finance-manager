@@ -1,7 +1,8 @@
-import { LogoApple, LogoGoogle } from "@/assets/app";
+import { IconUserSquare, LogoApple, LogoGoogle } from "@/assets/app";
 import { Loading, Text } from "@/components";
 import { auth } from "@/contracts";
 import { getItem, setAuthSession, StorageKey } from "@/services";
+import { colors } from "@/styles";
 import { delay } from "@/utils";
 import { toast } from "@backpackapp-io/react-native-toast";
 import {
@@ -115,6 +116,25 @@ export default function App() {
 		}
 	}
 
+	async function handleMockAuthentication() {
+		setIsLoading(true);
+
+		const { data } = await auth({
+			token: "mock",
+			provider: "MOCK",
+		});
+
+		setAuthSession({
+			user: data.user,
+			accessToken: data.access_token,
+			refreshToken: data.refresh_token,
+		});
+
+		setIsLoading(false);
+
+		replace("/app");
+	}
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<View className="flex-1">
@@ -157,6 +177,19 @@ export default function App() {
 
 							<LogoGoogle />
 						</TouchableOpacity>
+
+						{process.env.NODE_ENV === "development" && (
+							<TouchableOpacity
+								onPress={handleMockAuthentication}
+								className="rounded-xl p-3 bg-white flex-row items-center justify-center gap-4 border border-solid border-gray-100"
+							>
+								<Text className="text-black font-jakarta-600">
+									Entrar com usuário mock
+								</Text>
+
+								<IconUserSquare color={colors.black} />
+							</TouchableOpacity>
+						)}
 					</View>
 				</View>
 			</View>
