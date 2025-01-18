@@ -6,6 +6,8 @@ export * from "./input";
 
 export * from "./label";
 
+export * from "./dialog";
+
 export * from "./avatar";
 
 export * from "./button";

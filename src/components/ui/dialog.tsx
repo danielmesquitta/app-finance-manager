@@ -1,5 +1,10 @@
 import * as DialogPrimitive from "@rn-primitives/dialog";
-import { StyleSheet, View, type ViewProps } from "react-native";
+import {
+	StyleSheet,
+	useWindowDimensions,
+	View,
+	type ViewProps,
+} from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { IconX } from "@/assets/app";
 import { cn } from "@/utils";
@@ -50,8 +55,8 @@ const DialogContent = forwardRef<
 >(
 	(
 		{
-			className,
 			children,
+			className,
 			portalHost,
 			isBottomSheet,
 			hasCloseButton = true,
@@ -59,6 +64,8 @@ const DialogContent = forwardRef<
 		},
 		ref,
 	) => {
+		const { width } = useWindowDimensions();
+
 		return (
 			<DialogPortal hostName={portalHost}>
 				<DialogOverlay
@@ -67,18 +74,25 @@ const DialogContent = forwardRef<
 				>
 					<DialogPrimitive.Content
 						ref={ref}
-						className={cn("max-w-lg gap-4 bg-white p-6 rounded-lg", className)}
+						style={{ width: isBottomSheet ? width : "auto" }}
+						className={cn(
+							"bg-white",
+							className,
+							isBottomSheet ? "rounded-t-lg" : "rounded-lg",
+						)}
 						{...props}
 					>
 						{isBottomSheet && (
-							<View className="w-9 h-1 absolute top-2 rounded-full bg-gray-400" />
+							<View className="absolute top-2 items-center w-full">
+								<View className="w-9 h-1 rounded-full bg-gray-400" />
+							</View>
 						)}
 
 						{children}
 
 						{hasCloseButton && (
-							<DialogPrimitive.Close className="absolute right-4 top-4 p-0.5 rounded-sm opacity-70">
-								<IconX color={colors.gray[400]} width={16} />
+							<DialogPrimitive.Close className="absolute right-7 top-6 p-2 rounded-xl bg-gray-50">
+								<IconX color={colors.gray[400]} width={20} height={20} />
 							</DialogPrimitive.Close>
 						)}
 					</DialogPrimitive.Content>
@@ -90,7 +104,13 @@ const DialogContent = forwardRef<
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, ...props }: ViewProps) => (
-	<View className={cn("flex-col gap-1.5 text-left", className)} {...props} />
+	<View
+		className={cn(
+			"flex-col gap-1.5 text-left p-7 border-b border-solid border-b-gray-50",
+			className,
+		)}
+		{...props}
+	/>
 );
 DialogHeader.displayName = "DialogHeader";
 

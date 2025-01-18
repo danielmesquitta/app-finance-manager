@@ -4,6 +4,7 @@ import { Text } from "@/components/ui";
 import { colors } from "@/styles";
 import { useRouter } from "expo-router";
 import { useSafeArea } from "@/hooks";
+import type { PropsWithChildren } from "react";
 
 interface HeadNavigationProps {
 	title: string;
@@ -12,8 +13,9 @@ interface HeadNavigationProps {
 
 export function HeadNavigation({
 	title,
+	children,
 	showBackButton = true,
-}: HeadNavigationProps) {
+}: PropsWithChildren<HeadNavigationProps>) {
 	const { back } = useRouter();
 
 	const { top } = useSafeArea();
@@ -21,7 +23,7 @@ export function HeadNavigation({
 	return (
 		<View
 			style={{ paddingTop: top + 16 }}
-			className="flex-row items-center justify-between bg-white pb-5 px-7"
+			className="flex-row items-center justify-between bg-white pb-5 px-7 border-b border-solid border-gray-50"
 		>
 			{showBackButton && (
 				<TouchableOpacity
@@ -36,9 +38,9 @@ export function HeadNavigation({
 				</TouchableOpacity>
 			)}
 
-			<Text className="font-jakarta-600">{title}</Text>
+			<Text className="text-lg font-jakarta-600">{title}</Text>
 
-			<View className="size-9" />
+			{children ?? <View className="size-9" />}
 		</View>
 	);
 }

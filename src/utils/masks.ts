@@ -34,7 +34,11 @@ export function phone(text: string) {
 		.replace(/(-\d{4})\d+?$/, "$1");
 }
 
-export function currency(value: number, defaultType?: "CENT" | "REAL") {
+export function currency(
+	value: number,
+	defaultType?: "CENT" | "REAL",
+	options?: Intl.NumberFormatOptions,
+) {
 	const type = defaultType ?? "CENT";
 
 	return new Intl.NumberFormat("pt-BR", {

@@ -1,5 +1,7 @@
 export { default as IconX } from "./icon-x.svg";
 
+export { default as IconCar } from "./icon-car.svg";
+
 export { default as IconOld } from "./icon-old.svg";
 
 export { default as IconBook } from "./icon-book.svg";
@@ -20,7 +22,11 @@ export { default as IconWallet } from "./icon-wallet.svg";
 
 export { default as LogoGoogle } from "./logo-google.svg";
 
+export { default as IconPencil } from "./icon-pencil.svg";
+
 export { default as IconFriends } from "./icon-friends.svg";
+
+export { default as IconSettings } from "./icon-settings.svg";
 
 export { default as IconChartBar } from "./icon-chart-bar.svg";
 
