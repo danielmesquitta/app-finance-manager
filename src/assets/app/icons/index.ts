@@ -24,6 +24,8 @@ export { default as LogoGoogle } from "./logo-google.svg";
 
 export { default as IconPencil } from "./icon-pencil.svg";
 
+export { default as IconLogout2 } from "./icon-logout-2.svg";
+
 export { default as IconFriends } from "./icon-friends.svg";
 
 export { default as IconSettings } from "./icon-settings.svg";

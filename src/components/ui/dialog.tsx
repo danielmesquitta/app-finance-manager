@@ -115,7 +115,10 @@ const DialogHeader = ({ className, ...props }: ViewProps) => (
 DialogHeader.displayName = "DialogHeader";
 
 const DialogFooter = ({ className, ...props }: ViewProps) => (
-	<View className={cn("flex-row justify-end gap-2", className)} {...props} />
+	<View
+		className={cn("flex-row justify-end gap-2 px-7 pt-2 pb-7", className)}
+		{...props}
+	/>
 );
 DialogFooter.displayName = "DialogFooter";
 

@@ -3,6 +3,7 @@ import {
 	IconCalculator,
 	IconChevronRight,
 	IconFileDescription,
+	IconLogout2,
 	IconMessageStar,
 	IconNotes,
 	IconSmartHome,
@@ -13,15 +14,22 @@ import {
 	AvatarFallback,
 	AvatarImage,
 	Button,
+	Dialog,
+	DialogContent,
+	DialogTitle,
+	DialogHeader,
+	DialogTrigger,
 	Text,
+	DialogFooter,
+	DialogClose,
 } from "@/components";
 import { useSafeArea } from "@/hooks";
-import { getUser } from "@/services";
+import { clearAuthSession, getUser } from "@/services";
 import { colors } from "@/styles";
 import { formatInitials } from "@/utils";
-import { Link, type RelativePathString } from "expo-router";
+import { Link, useRouter, type RelativePathString } from "expo-router";
 import type { FC } from "react";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import type { SvgProps } from "react-native-svg";
 
@@ -115,9 +123,17 @@ function Card({ title, options }: CardProps) {
 export default function MorePage() {
 	const user = getUser();
 
+	const { replace } = useRouter();
+
 	const { top } = useSafeArea();
 
 	if (!user) return null;
+
+	async function handleLogout() {
+		clearAuthSession();
+
+		replace("/");
+	}
 
 	return (
 		<View className="flex-1 items-center">
@@ -152,6 +168,62 @@ export default function MorePage() {
 					<Card title="Preferências" options={routes.preferences} />
 
 					<Card title="Ajuda" options={routes.help} />
+
+					<Dialog>
+						<DialogTrigger asChild>
+							<TouchableOpacity className="flex-row items-center gap-4 w-full bg-white p-4 rounded-xl">
+								<View className="p-1.5 bg-gray-50 rounded-xl">
+									<IconLogout2
+										color={colors.gray[400]}
+										width={24}
+										height={24}
+									/>
+								</View>
+
+								<Text className="text-sm font-jakarta-500">Sair</Text>
+
+								<IconChevronRight
+									color={colors.gray[400]}
+									width={16}
+									style={{ marginLeft: "auto" }}
+								/>
+							</TouchableOpacity>
+						</DialogTrigger>
+
+						<DialogContent isBottomSheet>
+							<DialogHeader>
+								<DialogTitle>Sair da conta</DialogTitle>
+							</DialogHeader>
+
+							<View className="items-center p-6">
+								<View className="size-20 rounded-full bg-primary-500 items-center justify-center">
+									<View className="size-16 rounded-full border-4 border-solid border-white/20 items-center justify-center">
+										<IconLogout2 color={colors.white} width={24} height={24} />
+									</View>
+								</View>
+
+								<Text className="text-xl font-jakarta-600 mt-7 mb-2 text-center">
+									Deseja sair da sua conta?
+								</Text>
+
+								<Text className="text-sm text-gray-500 max-w-[200px] text-center">
+									Se você sair da conta, você terá que fazer login novamente.
+								</Text>
+							</View>
+
+							<DialogFooter>
+								<DialogClose asChild>
+									<Button variant="gray">
+										<Text>Cancelar</Text>
+									</Button>
+								</DialogClose>
+
+								<Button variant="black" onPress={handleLogout}>
+									<Text>Sair da conta</Text>
+								</Button>
+							</DialogFooter>
+						</DialogContent>
+					</Dialog>
 				</View>
 			</ScrollView>
 		</View>
