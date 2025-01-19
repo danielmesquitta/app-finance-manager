@@ -1,5 +1,7 @@
 export * from "./ui";
 
+export * from "./metrics";
+
 export * from "./navigation";
 
 export * from "./line-chart";

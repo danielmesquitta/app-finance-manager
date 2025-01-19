@@ -44,7 +44,15 @@ export function currency(
 	return new Intl.NumberFormat("pt-BR", {
 		style: "currency",
 		currency: "BRL",
+		...options,
 	}).format(type === "CENT" ? value / 100 : value);
+}
+
+export function currencyWithoutSymbol(value: number) {
+	return value.toLocaleString("pt-BR", {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	});
 }
 
 export function money(text: string) {
@@ -82,4 +90,5 @@ export const masks = {
 	money,
 	currency,
 	percentage,
+	currencyWithoutSymbol,
 };

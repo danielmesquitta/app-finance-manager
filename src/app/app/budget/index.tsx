@@ -9,7 +9,6 @@ import {
 	IconMedicineSyrup,
 	IconSettings,
 	IconToolsKitchen2,
-	IconTrendingUp,
 } from "@/assets/app";
 import {
 	Text,
@@ -20,8 +19,13 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogHeader,
+	Skeleton,
+	HighlightCard,
 } from "@/components";
+import { BUDGETS_KEY, getBudgets } from "@/contracts";
 import { colors } from "@/styles";
+import { cn, masks } from "@/utils";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -65,6 +69,26 @@ const data = [
 ];
 
 export default function BudgetPage() {
+	const { data: budgets } = useQuery({
+		queryFn: () => getBudgets({}),
+		queryKey: [BUDGETS_KEY],
+	});
+
+	const categories = budgets?.budget_categories
+		? budgets.budget_categories.map(({ amount, category }) => {
+				return {
+					name: category.name,
+					color: "#F00",
+					percentage: (amount / budgets.amount) * 100,
+				};
+			})
+		: [];
+
+	const sumCategoriesPercentage = categories.reduce(
+		(acc, { percentage }) => acc + percentage,
+		0,
+	);
+
 	return (
 		<View className="flex-1">
 			<HeadNavigation title="Orçamento" showBackButton={false}>
@@ -88,22 +112,45 @@ export default function BudgetPage() {
 					<View className="flex-row items-end gap-2 my-2">
 						<Text className="text-xl text-gray-400">R$</Text>
 
-						<Text className="text-3xl font-jakarta-600 text-black">
-							1000,00
-						</Text>
+						{budgets?.spent !== undefined ? (
+							<Text className="text-3xl font-jakarta-600 text-black">
+								{masks.currencyWithoutSymbol(budgets.spent)}
+							</Text>
+						) : (
+							<Skeleton className="w-40 h-8" />
+						)}
 					</View>
 
-					<Text className="text-gray-400">/ R$ 4.000,00</Text>
+					{budgets?.amount !== undefined ? (
+						<Text className="text-gray-400">
+							/ R$ {masks.currencyWithoutSymbol(budgets.amount)}
+						</Text>
+					) : (
+						<Skeleton className="w-40 h-6" />
+					)}
 
 					<View className="items-center gap-2 w-full mt-8">
 						<View className="w-full h-2 flex-row items-center rounded-full bg-gray-100">
-							<View className="w-1/6 h-full rounded-l-full bg-primary-400" />
-							<View className="w-1/6 h-full bg-cyan-500" />
-							<View className="w-2/6 h-full rounded-r-full bg-purple-500" />
+							{categories.map(({ name, color, percentage }, index) => (
+								<View
+									key={name}
+									style={{
+										width: `${percentage}%`,
+										backgroundColor: color,
+									}}
+									className={cn(
+										"h-full",
+										index === 0 && "rounded-l-full",
+										index === categories.length - 1 && "rounded-r-full",
+									)}
+								/>
+							))}
 						</View>
 
 						<View
-							style={{ left: "66%" }}
+							style={{
+								left: `${sumCategoriesPercentage === 100 ? 98 : sumCategoriesPercentage}%`,
+							}}
 							className="p-1 bg-white rounded-full absolute -top-1.5"
 						>
 							<View className="size-3 rounded-full bg-black" />
@@ -117,77 +164,22 @@ export default function BudgetPage() {
 					</View>
 
 					<View className="flex-row items-center gap-4 w-full mt-8">
-						<View className="border border-solid border-gray-100 rounded-xl flex-1">
-							<View className="bg-gray-50 rounded-t-xl py-3 px-4 flex-row items-center gap-3">
-								<View className="p-1.5 bg-white rounded-xl">
-									<IconCoins width={16} height={16} color={colors.green[500]} />
-								</View>
+						<HighlightCard
+							icon={IconCoins}
+							title="Disponível"
+							value={budgets?.available}
+							percentageVariation={budgets?.available_percentage_variation}
+						/>
 
-								<Text className="text-xs font-jakarta-500 text-black">
-									Disponível
-								</Text>
-							</View>
-
-							<View className="py-3 px-4 gap-1">
-								<View className="flex-row items-end gap-1">
-									<Text className="text-sm text-gray-400">R$</Text>
-
-									<Text className="text-xl font-jakarta-600 text-black">
-										1000,00
-									</Text>
-								</View>
-
-								<View className="flex-row items-center">
-									<IconTrendingUp
-										width={16}
-										height={16}
-										color={colors.green[500]}
-									/>
-
-									<Text className="text-xs ml-2 mr-1 text-green-500">+23%</Text>
-
-									<Text className="text-xs text-gray-400">que agosto</Text>
-								</View>
-							</View>
-						</View>
-
-						<View className="border border-solid border-gray-100 rounded-xl flex-1">
-							<View className="bg-gray-50 rounded-t-xl py-3 px-4 flex-row items-center gap-3">
-								<View className="p-1.5 bg-white rounded-xl">
-									<IconChartBar
-										width={16}
-										height={16}
-										color={colors.green[500]}
-									/>
-								</View>
-
-								<Text className="text-xs font-jakarta-500 text-black">
-									Média por dia
-								</Text>
-							</View>
-
-							<View className="py-3 px-4 gap-1">
-								<View className="flex-row items-end gap-1">
-									<Text className="text-sm text-gray-400">R$</Text>
-
-									<Text className="text-xl font-jakarta-600 text-black">
-										41,62
-									</Text>
-								</View>
-
-								<View className="flex-row items-center">
-									<IconTrendingUp
-										width={16}
-										height={16}
-										color={colors.green[500]}
-									/>
-
-									<Text className="text-xs ml-2 mr-1 text-green-500">+20%</Text>
-
-									<Text className="text-xs text-gray-400">que agosto</Text>
-								</View>
-							</View>
-						</View>
+						<HighlightCard
+							icon={IconChartBar}
+							title="Média por dia"
+							value={budgets?.available_per_day}
+							percentageVariation={
+								budgets?.available_per_day_percentage_variation
+							}
+							showNegativeVariation={false}
+						/>
 					</View>
 				</View>
 

@@ -20,4 +20,6 @@ export * from "./tooltip";
 
 export * from "./loading";
 
+export * from "./skeleton";
+
 export * from "./separator";

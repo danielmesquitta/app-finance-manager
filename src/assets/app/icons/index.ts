@@ -62,6 +62,8 @@ export { default as IconChevronDown } from "./icon-chevron-down.svg";
 
 export { default as IconChevronRight } from "./icon-chevron-right.svg";
 
+export { default as IconTrendingDown } from "./icon-trending-down.svg";
+
 export { default as IconMedicineSyrup } from "./icon-medicine-syrup.svg";
 
 export { default as IconToolsKitchen2 } from "./icon-tools-kitchen-2.svg";
