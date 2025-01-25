@@ -1,28 +1,29 @@
 import {
-	IconBook,
-	IconCar,
 	IconChartBar,
 	IconChevronRight,
 	IconCircleCheck,
 	IconCoins,
-	IconHome2,
-	IconMedicineSyrup,
 	IconSettings,
 	IconToolsKitchen2,
 } from "@/assets/app";
 import {
 	Text,
 	HeadNavigation,
-	BudgetCard,
-	Dialog,
-	DialogTrigger,
-	DialogContent,
-	DialogTitle,
-	DialogHeader,
 	Skeleton,
 	HighlightCard,
+	Dialog,
+	DialogContent,
+	DialogTrigger,
+	BudgetCard,
+	DialogHeader,
+	DialogTitle,
 } from "@/components";
-import { BUDGETS_KEY, getBudgets } from "@/contracts";
+import {
+	BUDGETS_KEY,
+	getBudgets,
+	getTransactionsByCategory,
+	TRANSACTIONS_BY_CATEGORY_KEY,
+} from "@/contracts";
 import { colors } from "@/styles";
 import { cn, masks } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -30,43 +31,57 @@ import { Link } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-const data = [
-	{
-		icon: IconToolsKitchen2,
-		title: "Alimentação",
-		color: colors.primary[500],
-		spent: 18000,
-		budget: 60000,
-	},
-	{
-		icon: IconCar,
-		title: "Transporte",
-		color: colors.purple[500],
-		spent: 20000,
-		budget: 60000,
-	},
-	{
-		icon: IconMedicineSyrup,
-		title: "Farmácia",
-		color: colors.cyan[500],
-		spent: 32000,
-		budget: 40000,
-	},
-	{
-		icon: IconHome2,
-		title: "Casa",
-		color: colors.pink[500],
-		spent: 80000,
-		budget: 100000,
-	},
-	{
-		icon: IconBook,
-		title: "Educação",
-		color: colors.green[300],
-		spent: 60000,
-		budget: 140000,
-	},
-];
+interface TransactionsDialogProps {
+	categoryId: string;
+}
+
+export function TransactionsDialog({ categoryId }: TransactionsDialogProps) {
+	const { data: transactions } = useQuery({
+		queryFn: () => getTransactionsByCategory({ categoryId }),
+		enabled: !!categoryId,
+		queryKey: [TRANSACTIONS_BY_CATEGORY_KEY, categoryId],
+	});
+
+	console.log({ transactions });
+
+	return (
+		<View className="bg-gray-50 p-7 gap-7">
+			{transactions ? (
+				transactions.items ? (
+					<Text className="text-sm text-gray-500">
+						{transactions.total_items.toString().padStart(2, "0")} transaç
+						{transactions.total_items === 1 ? "ão" : "ões"}
+					</Text>
+				) : null
+			) : (
+				<Skeleton className="w-full h-5" />
+			)}
+
+			{!transactions &&
+				Array.from({ length: 4 }).map((_) => (
+					<Skeleton key={Math.random()} className="w-full h-11" />
+				))}
+
+			{transactions?.items?.map(({ id, name, amount, payment_method_name }) => (
+				<View key={id} className="flex-row justify-between items-center">
+					<View className="gap-1">
+						<Text className="text-sm text-black font-jakarta-600">{name}</Text>
+
+						<Text className="text-xs text-gray-500">{payment_method_name}</Text>
+					</View>
+
+					<View className="flex-row gap-2 items-center">
+						<Text className="text-sm text-gray-400">R$</Text>
+
+						<Text className="text-sm text-red-500 font-jakarta-600">
+							{masks.currencyWithoutSymbol(amount)}
+						</Text>
+					</View>
+				</View>
+			))}
+		</View>
+	);
+}
 
 export default function BudgetPage() {
 	const { data: budgets } = useQuery({
@@ -184,93 +199,75 @@ export default function BudgetPage() {
 				</View>
 
 				<View className="p-7 flex-1 gap-4">
-					{data.map(({ spent, budget, ...rest }) => {
-						const percentage = (spent / budget) * 100;
+					{budgets?.budget_categories.map(
+						({ id, spent, amount, available, category }) => {
+							const percentage = (spent / amount) * 100;
 
-						const remaining = budget - spent;
+							const payload = {
+								icon: IconToolsKitchen2,
+								title: category.name,
+								color: colors.primary[500],
+							};
 
-						return (
-							<Dialog key={rest.title}>
-								<DialogTrigger asChild>
-									<TouchableOpacity className="p-5 gap-4 rounded-xl bg-white">
-										<BudgetCard.Details {...rest} budget={budget}>
-											<View className="ml-auto p-2 rounded-xl border border-solid border-gray-50">
-												<IconChevronRight
-													color={colors.black}
-													width={16}
-													height={16}
-												/>
-											</View>
-										</BudgetCard.Details>
+							return (
+								<Dialog key={id}>
+									<DialogTrigger asChild>
+										<TouchableOpacity className="p-5 gap-4 rounded-xl bg-white">
+											<BudgetCard.Details {...payload} budget={amount}>
+												<View className="ml-auto p-2 rounded-xl border border-solid border-gray-50">
+													<IconChevronRight
+														color={colors.black}
+														width={16}
+														height={16}
+													/>
+												</View>
+											</BudgetCard.Details>
 
-										<BudgetCard.Bar
-											color={rest.color}
-											percentage={percentage}
-										/>
+											<BudgetCard.Bar
+												color={payload.color}
+												percentage={percentage}
+											/>
 
-										<BudgetCard.Remaining spent={spent} remaining={remaining} />
-									</TouchableOpacity>
-								</DialogTrigger>
+											<BudgetCard.Remaining
+												spent={spent}
+												remaining={available}
+											/>
+										</TouchableOpacity>
+									</DialogTrigger>
 
-								<DialogContent isBottomSheet>
-									<DialogHeader>
-										<DialogTitle>Detalhes</DialogTitle>
-									</DialogHeader>
+									<DialogContent isBottomSheet>
+										<DialogHeader>
+											<DialogTitle>Detalhes</DialogTitle>
+										</DialogHeader>
 
-									<View className="p-7 gap-5">
-										<BudgetCard.Details {...rest} budget={budget} />
+										<View className="p-7 gap-5">
+											<BudgetCard.Details {...payload} budget={amount} />
 
-										<BudgetCard.Bar
-											color={rest.color}
-											percentage={percentage}
-										/>
+											<BudgetCard.Bar
+												color={payload.color}
+												percentage={percentage}
+											/>
 
-										<BudgetCard.Remaining spent={spent} remaining={remaining} />
-									</View>
-
-									<View className="bg-gray-50 p-7 gap-7">
-										<Text className="text-sm text-gray-500">02 transações</Text>
-
-										<View className="flex-row justify-between items-center">
-											<View className="gap-1">
-												<Text className="text-sm text-black font-jakarta-600">
-													Posto Petrobrás 2
-												</Text>
-
-												<Text className="text-xs text-gray-500">Crédito</Text>
-											</View>
-
-											<View className="flex-row gap-2 items-center">
-												<Text className="text-sm text-gray-400">R$</Text>
-
-												<Text className="text-sm text-red-500 font-jakarta-600">
-													100,00
-												</Text>
-											</View>
+											<BudgetCard.Remaining
+												spent={spent}
+												remaining={available}
+											/>
 										</View>
 
-										<View className="flex-row justify-between items-center">
-											<View className="gap-1">
-												<Text className="text-sm text-black font-jakarta-600">
-													Posto Petrobrás 2
-												</Text>
+										<TransactionsDialog categoryId={id} />
+									</DialogContent>
+								</Dialog>
+							);
+						},
+					)}
 
-												<Text className="text-xs text-gray-500">Crédito</Text>
-											</View>
-
-											<View className="flex-row gap-2 items-center">
-												<Text className="text-sm text-gray-400">R$</Text>
-
-												<Text className="text-sm text-red-500 font-jakarta-600">
-													100,00
-												</Text>
-											</View>
-										</View>
-									</View>
-								</DialogContent>
-							</Dialog>
-						);
-					})}
+					{!budgets && (
+						<View className="flex-1 gap-4">
+							{Array.from({ length: 4 }).map((_) => (
+								<Skeleton key={Math.random()} className="w-full h-36" />
+							))}
+						</View>
+					)}
 				</View>
 			</ScrollView>
 		</View>

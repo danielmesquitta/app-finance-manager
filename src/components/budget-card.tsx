@@ -26,7 +26,7 @@ function Bar({ percentage, color }: BarProps) {
 		<View className="w-full h-1.5 flex-row items-center bg-gray-100 rounded-full">
 			<View
 				style={{
-					width: `${percentage}%`,
+					width: `${percentage > 100 ? 100 : percentage}%`,
 					backgroundColor: color,
 				}}
 				className="h-full rounded-full"
