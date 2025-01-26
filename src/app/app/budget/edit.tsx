@@ -1,7 +1,14 @@
 import { Text, HeadNavigation, Button, DismissKeyboard } from "@/components";
+import { BUDGETS_KEY, getBudgets } from "@/contracts";
+import { useQuery } from "@tanstack/react-query";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
 export default function BudgetEdit() {
+	const { data: budgets } = useQuery({
+		queryFn: () => getBudgets({}),
+		queryKey: [BUDGETS_KEY],
+	});
+
 	return (
 		<DismissKeyboard>
 			<View className="flex-1">

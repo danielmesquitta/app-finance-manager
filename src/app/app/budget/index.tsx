@@ -24,6 +24,7 @@ import {
 	getTransactionsByCategory,
 	TRANSACTIONS_BY_CATEGORY_KEY,
 } from "@/contracts";
+import { Image } from "expo-image";
 import { colors } from "@/styles";
 import { cn, masks } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -42,7 +43,7 @@ export function TransactionsDialog({ categoryId }: TransactionsDialogProps) {
 		queryKey: [TRANSACTIONS_BY_CATEGORY_KEY, categoryId],
 	});
 
-	console.log({ transactions });
+	console.log({ transactions: transactions?.items });
 
 	return (
 		<View className="bg-gray-50 p-7 gap-7">
@@ -62,23 +63,39 @@ export function TransactionsDialog({ categoryId }: TransactionsDialogProps) {
 					<Skeleton key={Math.random()} className="w-full h-11" />
 				))}
 
-			{transactions?.items?.map(({ id, name, amount, payment_method_name }) => (
-				<View key={id} className="flex-row justify-between items-center">
-					<View className="gap-1">
-						<Text className="text-sm text-black font-jakarta-600">{name}</Text>
+			{transactions?.items?.map(
+				({ id, name, amount, institution_logo, payment_method_name }) => (
+					<View key={id} className="flex-row justify-between items-center">
+						<View className="gap-1">
+							<Text className="text-sm text-black font-jakarta-600">
+								{name}
+							</Text>
 
-						<Text className="text-xs text-gray-500">{payment_method_name}</Text>
+							<View className="flex-row items-center gap-3">
+								<Text className="text-xs text-gray-500">
+									{payment_method_name}
+								</Text>
+
+								<View className="size-2 rounded-full bg-gray-100" />
+
+								<Image
+									style={{ width: 24, height: 24 }}
+									source={{ uri: institution_logo }}
+									className="rounded-lg object-cover"
+								/>
+							</View>
+						</View>
+
+						<View className="flex-row gap-2 items-center">
+							<Text className="text-sm text-gray-400">R$</Text>
+
+							<Text className="text-sm text-red-500 font-jakarta-600">
+								{masks.currencyWithoutSymbol(amount / 100)}
+							</Text>
+						</View>
 					</View>
-
-					<View className="flex-row gap-2 items-center">
-						<Text className="text-sm text-gray-400">R$</Text>
-
-						<Text className="text-sm text-red-500 font-jakarta-600">
-							{masks.currencyWithoutSymbol(amount)}
-						</Text>
-					</View>
-				</View>
-			))}
+				),
+			)}
 		</View>
 	);
 }
@@ -254,7 +271,7 @@ export default function BudgetPage() {
 											/>
 										</View>
 
-										<TransactionsDialog categoryId={id} />
+										<TransactionsDialog categoryId={category.id} />
 									</DialogContent>
 								</Dialog>
 							);
