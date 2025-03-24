@@ -1,8 +1,8 @@
 {
-  "name": "finances",
+  "name": "app-finance-manager",
   "main": "expo-router/entry",
   "version": "1.0.0",
-  "author": "Yuri Martins <develop@yumartins.com.br>",
+  "author": "Daniel Mesquita <danielmesquitta123@gmail.com>",
   "license": "MIT",
   "scripts": {
     "ios": "expo run:ios",
@@ -11,7 +11,7 @@
     "lint:check": "bunx biome check ./src",
     "check:updates": "bunx npm-check-updates --interactive --format group"
   },
-  "repository": "https://github.com/yumartins/finances.git",
+  "repository": "https://github.com/danielmesquitta/app-finance-manager.git",
   "dependencies": {
     "@backpackapp-io/react-native-toast": "^0.13.0",
     "@expo-google-fonts/plus-jakarta-sans": "^0.2.3",
