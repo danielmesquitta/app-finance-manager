@@ -49,7 +49,7 @@ export function TransactionsDialog({ categoryId }: TransactionsDialogProps) {
     <View className="bg-gray-50 p-7 gap-7">
       {transactions ? (
         transactions.items ? (
-          <Text className="text-sm text-gray-500">
+          <Text className="text-base text-gray-500">
             {transactions.total_items.toString().padStart(2, "0")} transaç
             {transactions.total_items === 1 ? "ão" : "ões"}
           </Text>
@@ -67,12 +67,12 @@ export function TransactionsDialog({ categoryId }: TransactionsDialogProps) {
         ({ id, name, amount, institution_logo, payment_method_name }) => (
           <View key={id} className="flex-row justify-between items-center">
             <View className="gap-1">
-              <Text className="text-sm text-black font-jakarta-600">
+              <Text className="text-base text-black font-jakarta-600">
                 {name}
               </Text>
 
               <View className="flex-row items-center gap-3">
-                <Text className="text-xs text-gray-500">
+                <Text className="text-sm text-gray-500">
                   {payment_method_name}
                 </Text>
 
@@ -87,9 +87,9 @@ export function TransactionsDialog({ categoryId }: TransactionsDialogProps) {
             </View>
 
             <View className="flex-row gap-2 items-center">
-              <Text className="text-sm text-gray-400">R$</Text>
+              <Text className="text-base text-gray-400">R$</Text>
 
-              <Text className="text-sm text-red-500 font-jakarta-600">
+              <Text className="text-base text-red-500 font-jakarta-600">
                 {masks.currencyWithoutSymbol(amount / 100)}
               </Text>
             </View>
@@ -144,16 +144,16 @@ export default function ListBudgetsPage() {
           <View className="flex-row items-center gap-2">
             <IconCircleCheck color={colors.green[500]} width={16} height={16} />
 
-            <Text className="text-sm font-jakarta-500 text-green-500">
+            <Text className="text-base font-jakarta-500 text-green-500">
               Orçamento
             </Text>
           </View>
 
           <View className="flex-row items-end gap-2 my-2">
-            <Text className="text-xl text-gray-400">R$</Text>
+            <Text className="text-2xl text-gray-400">R$</Text>
 
             {budgets?.spent !== undefined ? (
-              <Text className="text-3xl font-jakarta-600 text-black">
+              <Text className="text-4xl font-jakarta-600 text-black">
                 {masks.currencyWithoutSymbol(budgets.spent)}
               </Text>
             ) : (
@@ -199,9 +199,9 @@ export default function ListBudgetsPage() {
             </View>
 
             <View className="flex-row w-full items-center gap-2 justify-between">
-              <Text className="text-xs text-gray-400">0%</Text>
+              <Text className="text-sm text-gray-400">0%</Text>
 
-              <Text className="text-xs text-gray-400">100%</Text>
+              <Text className="text-sm text-gray-400">100%</Text>
             </View>
           </View>
 

@@ -91,7 +91,7 @@ const routes = {
 function Card({ title, options }: CardProps) {
   return (
     <View className="bg-white p-4 rounded-xl">
-      <Text className="text-xs text-gray-400 font-jakarta-500 mb-4">
+      <Text className="text-sm text-gray-400 font-jakarta-500 mb-4">
         {title}
       </Text>
 
@@ -105,7 +105,7 @@ function Card({ title, options }: CardProps) {
                 <Icon color={colors.gray[400]} />
               </View>
 
-              <Text className="text-sm font-jakarta-500">{label}</Text>
+              <Text className="text-base font-jakarta-500">{label}</Text>
 
               <IconChevronRight
                 color={colors.gray[400]}
@@ -150,9 +150,9 @@ export default function MorePage() {
           </AvatarFallback>
         </Avatar>
 
-        <Text className="mt-5 text-lg font-jakarta-600">{user.name}</Text>
+        <Text className="mt-5 text-xl font-jakarta-600">{user.name}</Text>
 
-        <Text className="text-xs text-gray-400">{user.email}</Text>
+        <Text className="text-sm text-gray-400">{user.email}</Text>
 
         <Button className="mt-7">
           <Text>Aprimore para o Plano PLUS+</Text>
@@ -180,7 +180,7 @@ export default function MorePage() {
                   />
                 </View>
 
-                <Text className="text-sm font-jakarta-500">Sair</Text>
+                <Text className="text-base font-jakarta-500">Sair</Text>
 
                 <IconChevronRight
                   color={colors.gray[400]}
@@ -202,11 +202,11 @@ export default function MorePage() {
                   </View>
                 </View>
 
-                <Text className="text-xl font-jakarta-600 mt-7 mb-2 text-center">
+                <Text className="text-2xl font-jakarta-600 mt-7 mb-2 text-center">
                   Deseja sair da sua conta?
                 </Text>
 
-                <Text className="text-sm text-gray-500 max-w-[200px] text-center">
+                <Text className="text-base text-gray-500 max-w-[200px] text-center">
                   Se você sair da conta, você terá que fazer login novamente.
                 </Text>
               </View>

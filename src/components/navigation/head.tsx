@@ -38,7 +38,7 @@ export function HeadNavigation({
         </TouchableOpacity>
       )}
 
-      <Text className="text-lg font-jakarta-600">{title}</Text>
+      <Text className="text-xl font-jakarta-600">{title}</Text>
 
       {children ?? <View className="size-9" />}
     </View>

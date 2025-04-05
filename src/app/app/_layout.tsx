@@ -46,7 +46,7 @@ const TabButton = forwardRef(
       <Pressable {...rest} ref={ref}>
         <View className="px-4 py-3 items-center gap-1">
           {isFocused ? <ActiveIcon /> : <Icon color={colors.gray[400]} />}
-          <Text className="text-xs text-gray-400">{label}</Text>
+          <Text className="text-sm text-gray-400">{label}</Text>
         </View>
       </Pressable>
     );
