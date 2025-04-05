@@ -10,6 +10,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -65,6 +66,7 @@ const DialogContent = forwardRef<
     ref
   ) => {
     const { width } = useWindowDimensions();
+    const { bottom } = useSafeAreaInsets();
 
     return (
       <DialogPortal hostName={portalHost}>
@@ -74,7 +76,10 @@ const DialogContent = forwardRef<
         >
           <DialogPrimitive.Content
             ref={ref}
-            style={{ width: isBottomSheet ? width : "auto" }}
+            style={{
+              width: isBottomSheet ? width : "auto",
+              paddingBottom: bottom * 0.8,
+            }}
             className={cn(
               "bg-white",
               className,

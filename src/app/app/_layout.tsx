@@ -54,7 +54,7 @@ const TabButton = forwardRef(
 );
 
 export default function Layout() {
-  const insets = useSafeAreaInsets();
+  const { bottom } = useSafeAreaInsets();
   const user = getUser();
 
   return (
@@ -62,7 +62,7 @@ export default function Layout() {
       <TabSlot />
 
       <TabList
-        style={{ paddingBottom: insets.bottom * 0.8 }}
+        style={{ paddingBottom: bottom * 0.8 }}
         className="bg-white pt-2 pb-4 px-6 rounded-t-lg"
       >
         <TabTrigger name="index" href="/app" asChild>
