@@ -11,6 +11,7 @@ import {
   IconSmartHomeActive,
 } from "@/assets/app";
 import { Text } from "@/components";
+import { getUser } from "@/services";
 import { colors } from "@/styles";
 import {
   Tabs as ExpoRouterTabs,
@@ -19,7 +20,7 @@ import {
   TabTrigger,
   type TabTriggerSlotProps,
 } from "expo-router/ui";
-import { forwardRef, type FC, type Ref } from "react";
+import { type FC, type Ref, forwardRef } from "react";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { SvgProps } from "react-native-svg";
@@ -54,6 +55,7 @@ const TabButton = forwardRef(
 
 export default function Layout() {
   const insets = useSafeAreaInsets();
+  const user = getUser();
 
   return (
     <ExpoRouterTabs>
@@ -87,7 +89,11 @@ export default function Layout() {
           />
         </TabTrigger>
 
-        <TabTrigger name="budget" href="/app/budget" asChild>
+        <TabTrigger
+          name="budget"
+          href={user?.has_budget ? "/app/budget" : "/app/budget/create"}
+          asChild
+        >
           <TabButton
             icon={IconCoins}
             label="Orçam."

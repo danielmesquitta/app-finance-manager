@@ -20,9 +20,9 @@ import {
 } from "@/components";
 import {
   BUDGETS_KEY,
+  TRANSACTIONS_BY_CATEGORY_KEY,
   getBudgets,
   listBudgetCategoryTransactions,
-  TRANSACTIONS_BY_CATEGORY_KEY,
 } from "@/contracts";
 import { isNotFoundError } from "@/services";
 import { colors } from "@/styles";
@@ -100,7 +100,7 @@ export function TransactionsDialog({ categoryId }: TransactionsDialogProps) {
   );
 }
 
-export default function BudgetPage() {
+export default function ListBudgetsPage() {
   const router = useRouter();
 
   const { data: budgets, error } = useQuery({
